@@ -52,7 +52,7 @@ public class MyCar extends TestbedTest{
 		
 		getWorld().setGravity(new Vec2(0,0));
 		
-		//let's try and get some ground work
+		//map limits
 		BodyDef bd = new BodyDef();
 		Body ground = getWorld().createBody(bd);
 		
@@ -75,7 +75,6 @@ public class MyCar extends TestbedTest{
 		ground.createFixture(pSpot, 1);
 		
 		//creating car body
-		
 		BodyDef carBodyDef = new BodyDef();
 		carBodyDef.linearDamping = 1;
 		carBodyDef.angularDamping = 1;
@@ -144,9 +143,6 @@ public class MyCar extends TestbedTest{
 		frontRightJoint = (RevoluteJoint)getWorld().createJoint(frontRightJointDef);
 		frontLeftJoint = (RevoluteJoint)getWorld().createJoint(frontLeftJointDef);
 		
-		
-		
-		
 		getWorld().createJoint(rearRightJointDef);
 		getWorld().createJoint(rearLeftJointDef);
 		
@@ -164,13 +160,6 @@ public class MyCar extends TestbedTest{
 		
 		
 		Vec2 sidewaysAxis = target.getTransform().R.col2.clone();
-//		Mat22.mulToOut(target.getTransform().R, velocity, sidewaysAxis);
-//		Vec2 res = Transform.mul(target.getTransform(), sidewaysAxis);
-//		target.setLinearVelocity(res);
-		
-		 /*b2Dot: function(a, b) {
-	         return a.x * b.x + a.y * b.y;
-	      },*/
 		float dotter = velocity.x * sidewaysAxis.x + velocity.y * sidewaysAxis.y;
 		sidewaysAxis.x *= dotter;
 		sidewaysAxis.y *= dotter;
@@ -189,9 +178,7 @@ public class MyCar extends TestbedTest{
 	@Override
 	public void update(){
 		super.update();
-getWorld().step(1/30, 8, 8);
-//		System.out.println(engineSpeed);
-//		System.out.println(steeringAngle);
+		getWorld().step(1/30, 8, 8);
 		
 		killOrthogonalVelocity(frontLeftWheel);
 		killOrthogonalVelocity(frontRightWheel);
@@ -232,15 +219,9 @@ getWorld().step(1/30, 8, 8);
 		switch(argKeyCode){
 			case KeyEvent.VK_UP:
 				engineSpeed = -HORSPOWER;
-				//rearLeftWheel.applyForce(new Vec2(0, engineSpeed), rearLeftWheel.getPosition());
-				//rearRightWheel.applyForce(new Vec2(0, engineSpeed), rearRightWheel.getPosition());
-				//frontRightJoint.setMotorSpeed(20f);
-				//frontLeftJoint.setMotorSpeed(20f);
 				break;
 			case KeyEvent.VK_DOWN:
 				engineSpeed = HORSPOWER;
-				//rearLeftWheel.applyForce(new Vec2(0, engineSpeed), rearLeftWheel.getPosition());
-				//rearRightWheel.applyForce(new Vec2(0, engineSpeed), rearRightWheel.getPosition());
 				break;
 			case KeyEvent.VK_LEFT:
 				steeringAngle = MAX_STEER_ANGLE;
