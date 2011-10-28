@@ -1,12 +1,17 @@
 package main_stuff;
 import java.awt.event.KeyEvent;
 
+import javax.swing.text.Segment;
+
 import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.shapes.PolygonShape;
+import org.jbox2d.common.Color3f;
+import org.jbox2d.common.MathUtils;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.PrismaticJointDef;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
@@ -43,6 +48,8 @@ public class MyCar extends TestbedTest{
 	Body frontRightWheel;
 	Body rearLeftWheel;
 	Body rearRightWheel;
+	
+	RayCastClosestCallback ccallback;
 	
 	public void setspeed(int hp) {
 		HORSPOWER = hp;
@@ -166,7 +173,8 @@ public class MyCar extends TestbedTest{
 		windshieldJointDef.lowerTranslation = windshieldJointDef.upperTranslation = 0;
 		getWorld().createJoint(windshieldJointDef);
 		
-		
+		//let's try to create parking sensors
+		ccallback = new RayCastClosestCallback();
 		
 	}
 
@@ -189,9 +197,26 @@ public class MyCar extends TestbedTest{
 		
 	}
 	
+	
+	Vec2 point1 = new Vec2();
+	Vec2 point2 = new Vec2();
+	Vec2 d = new Vec2();
+	float m_angle;
 	@Override
 	public void step(TestbedSettings settings){
 		super.step(settings);
+		point1.set(carBody.getWorldPoint(new Vec2(0, 2.7f)));
+		point2.set(carBody.getWorldPoint(new Vec2(0, 6)));
+		point2.add(point1);
+		ccallback.init();
+		getWorld().raycast(ccallback, point1, point2);
+		
+		if(ccallback.m_hit){
+			getDebugDraw().drawPoint(ccallback.m_point, 5, new Color3f(0.4f, 0.9f, 0.4f));
+			getDebugDraw().drawSegment(point1, ccallback.m_point, new Color3f(0.9f, 0.9f, 0.9f));
+		}else{
+			getDebugDraw().drawSegment(point1, point2, new Color3f(0.9f, 0.9f, 0.9f));
+		}
 		
 	}
 	
