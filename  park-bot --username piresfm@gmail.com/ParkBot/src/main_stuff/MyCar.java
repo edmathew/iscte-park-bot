@@ -1,18 +1,8 @@
 package main_stuff;
-import java.awt.RenderingHints.Key;
 import java.awt.event.KeyEvent;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.plaf.basic.BasicSplitPaneUI.KeyboardDownRightHandler;
-
-import org.jbox2d.callbacks.DebugDraw;
 import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.shapes.PolygonShape;
-import org.jbox2d.common.Color3f;
-import org.jbox2d.common.IViewportTransform;
-import org.jbox2d.common.Mat22;
-import org.jbox2d.common.Transform;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
