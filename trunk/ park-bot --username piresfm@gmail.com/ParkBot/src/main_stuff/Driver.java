@@ -9,9 +9,12 @@ import main_stuff.MyCar;
 public class Driver extends Thread{
 	
 	private MyCar t;
+	private int sleep;
 	
-	public Driver(TestbedTest t) {
+	public Driver(TestbedTest t, int hp, int sleep) {
 		this.t = (MyCar) t;
+		this.t.setspeed(hp);
+		this.sleep = sleep;
 	}
 	
 	@Override
@@ -52,7 +55,7 @@ public class Driver extends Thread{
 					break;
 			}
 			try {
-				this.sleep(1000);
+				this.sleep(sleep);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

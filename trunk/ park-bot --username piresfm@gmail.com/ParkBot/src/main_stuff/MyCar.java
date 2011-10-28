@@ -21,7 +21,7 @@ public class MyCar extends TestbedTest{
 	final static float MAX_STEER_ANGLE = (float) (Math.PI/3);
 	final static float STEER_SPEED = 1.5f;
 	final static int SIDEWAYS_FRICTION_FORCE = 10;
-	final static int HORSPOWER = 109;
+	static int HORSPOWER = 51;
 	final static Vec2 CAR_STARTING_POSITION = new Vec2(10,10);
 	
 	final static Vec2 LEFT_REAR_WHEEL_POSITION = new Vec2(-1.5f, 1.9f);
@@ -44,6 +44,9 @@ public class MyCar extends TestbedTest{
 	Body rearLeftWheel;
 	Body rearRightWheel;
 	
+	public void setspeed(int hp) {
+		HORSPOWER = hp;
+	}
 	
 	@Override
 	public void initTest(boolean argDeserialized) {
@@ -83,6 +86,12 @@ public class MyCar extends TestbedTest{
 		
 		carBody = getWorld().createBody(carBodyDef);
 		
+		BodyDef windshieldDef = new BodyDef();
+		windshieldDef.position = CAR_STARTING_POSITION.clone().addLocal(0, -1);
+		windshieldDef.type = BodyType.DYNAMIC;
+		
+		Body windshield = getWorld().createBody(windshieldDef);
+		
 		//creating wheels
 		
 		BodyDef frontLeftWheelDef = new BodyDef();
@@ -110,6 +119,11 @@ public class MyCar extends TestbedTest{
 		PolygonShape carBodyShape = new PolygonShape();
 		carBodyShape.setAsBox(1.5f, 2.5f);
 		carBody.createFixture(carBodyShape, 1);
+		
+		PolygonShape windshieldShape = new PolygonShape();
+		windshieldShape.setAsBox(0.7f, 0.5f);
+		windshield.createFixture(windshieldShape, 1);
+		
 		
 		PolygonShape wheel = new PolygonShape();
 		wheel.setAsBox(0.2f, 0.5f);
@@ -145,6 +159,12 @@ public class MyCar extends TestbedTest{
 		
 		getWorld().createJoint(rearRightJointDef);
 		getWorld().createJoint(rearLeftJointDef);
+		
+		PrismaticJointDef windshieldJointDef = new PrismaticJointDef();
+		windshieldJointDef.initialize(carBody, windshield, windshield.getWorldCenter(), new Vec2(1, 0));
+		windshieldJointDef.enableLimit = true;
+		windshieldJointDef.lowerTranslation = windshieldJointDef.upperTranslation = 0;
+		getWorld().createJoint(windshieldJointDef);
 		
 		
 		
