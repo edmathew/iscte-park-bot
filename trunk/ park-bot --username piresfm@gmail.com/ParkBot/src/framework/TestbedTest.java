@@ -515,17 +515,17 @@ public abstract class TestbedTest implements ContactListener, ObjectListener, Ob
 
     if (settings.getSetting(TestbedSettings.DrawStats).enabled) {
       // Vec2.watchCreations = true;
-      model.getDebugDraw().drawString(5, m_textLine, "Engine Info", color4);
-      m_textLine += 15;
-      model.getDebugDraw().drawString(5, m_textLine,
-          "Framerate: " + model.getCalculatedFps(), Color3f.WHITE);
-      m_textLine += 15;
-      model.getDebugDraw().drawString(
-          5,
-          m_textLine,
-          "bodies/contacts/joints/proxies = " + m_world.getBodyCount() + "/"
-              + m_world.getContactCount() + "/" + m_world.getJointCount() + "/"
-              + m_world.getProxyCount(), Color3f.WHITE);
+//      model.getDebugDraw().drawString(5, m_textLine, "Engine Info", color4);
+//      m_textLine += 15;
+//      model.getDebugDraw().drawString(5, m_textLine,
+//          "Framerate: " + model.getCalculatedFps(), Color3f.WHITE);
+//      m_textLine += 15;
+//      model.getDebugDraw().drawString(
+//          5,
+//          m_textLine,
+//          "bodies/contacts/joints/proxies = " + m_world.getBodyCount() + "/"
+//              + m_world.getContactCount() + "/" + m_world.getJointCount() + "/"
+//              + m_world.getProxyCount(), Color3f.WHITE);
       // m_textLine += 20;
       // m_model.getDebugDraw().drawString(5, m_textLine, "Pooling Info", color4);
       // m_textLine += 15;
