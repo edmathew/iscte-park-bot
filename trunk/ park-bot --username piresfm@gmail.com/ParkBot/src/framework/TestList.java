@@ -26,7 +26,6 @@
  */
 package framework;
 import main_stuff.MyCar;
-import main_stuff.RayCastTest;
 
 /**
  * @author Daniel Murphy
@@ -37,6 +36,5 @@ public class TestList {
       
       argModel.addCategory("Featured");
       argModel.addTest(new MyCar());
-      argModel.addTest(new RayCastTest());
   }
 }

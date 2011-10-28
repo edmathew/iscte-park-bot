@@ -3,6 +3,8 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.text.Segment;
 
+import library.RayCastClosestCallback;
+
 import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Color3f;
@@ -18,7 +20,6 @@ import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
 import framework.TestbedSettings;
 import framework.TestbedTest;
-
 
 
 public class MyCar extends TestbedTest{
@@ -217,6 +218,7 @@ public class MyCar extends TestbedTest{
 		}else{
 			getDebugDraw().drawSegment(point1, point2, new Color3f(0.9f, 0.9f, 0.9f));
 		}
+		
 		
 	}
 	
