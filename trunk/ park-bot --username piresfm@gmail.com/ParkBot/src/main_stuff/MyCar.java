@@ -14,6 +14,8 @@ import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.PrismaticJointDef;
 import org.jbox2d.dynamics.joints.RevoluteJoint;
 import org.jbox2d.dynamics.joints.RevoluteJointDef;
+
+import support.ParkingSensor;
 import framework.TestbedSettings;
 import framework.TestbedTest;
 
@@ -45,13 +47,6 @@ public class MyCar extends TestbedTest{
 	Body frontRightWheel;
 	Body rearLeftWheel;
 	Body rearRightWheel;
-	
-	//parking sensors
-	RayCastClosestCallback s1 = new RayCastClosestCallback();
-	RayCastClosestCallback s2 = new RayCastClosestCallback();
-	RayCastClosestCallback s3 = new RayCastClosestCallback();
-	RayCastClosestCallback s4 = new RayCastClosestCallback();
-	RayCastClosestCallback s5 = new RayCastClosestCallback();
 	
 	public void setspeed(int hp) {
 		HORSPOWER = hp;
@@ -201,58 +196,20 @@ public class MyCar extends TestbedTest{
 	@Override
 	public void step(TestbedSettings settings){
 		super.step(settings);
-
 		//Straight back parking sensor
-		Vec2 s1p1 = new Vec2();
-		Vec2 s1p2 = new Vec2();
-		s1p1.set(carBody.getWorldPoint(new Vec2(0, 2.5f)));
-		s1p2.set(carBody.getWorldPoint(new Vec2(0, 6)));
-		s1p2.add(s1p1);
-		s1.init();
-		getWorld().raycast(s1, s1p1, s1p2);
-
-		if(s1.m_hit){
-			getDebugDraw().drawPoint(s1.m_point, 5, new Color3f(0.4f, 0.9f, 0.4f));
-			getDebugDraw().drawSegment(s1p1, s1.m_point, new Color3f(0.9f, 0.9f, 0.9f));
-			addTextLine("S1 to obstacle: " + s1.m_point.clone().sub(s1p1).length());
-		}else{
-			getDebugDraw().drawSegment(s1p1, s1p2, new Color3f(0.9f, 0.9f, 0.9f));
-		}
+		ParkingSensor s1 = new ParkingSensor(this, carBody.getWorldPoint(new Vec2(0, 2.5f)),carBody.getWorldPoint(new Vec2(0, 6)));
+		s1.setSensorName("BackStraight");
+		s1.getSensorStatus();
 		
 		//Back-Left 45º Parking Sensor
-		Vec2 s2p1 = new Vec2();
-		Vec2 s2p2 = new Vec2();
-		s2p1.set(carBody.getWorldPoint(new Vec2(1.5f, 2.5f)));
-		s2p2.set(carBody.getWorldPoint(new Vec2(3.5f, 5)));
-		s2p2.add(s2p1);
-		s2.init();
-		getWorld().raycast(s2, s2p1, s2p2);
-		
-		if (s2.m_hit){
-			getDebugDraw().drawPoint(s2.m_point, 5, new Color3f(0.4f, 0.9f, 0.4f));
-			getDebugDraw().drawSegment(s2p1, s2.m_point, new Color3f(0.9f, 0.9f, 0.9f));
-			addTextLine("S2 to obstacle: " + s2.m_point.clone().sub(s2p1).length());
-		}else{
-			getDebugDraw().drawSegment(s2p1, s2p2, new Color3f(0.9f, 0.9f, 0.9f));
-		}
-		
+		ParkingSensor s2 = new ParkingSensor(this, carBody.getWorldPoint(new Vec2(1.5f, 2.5f)), carBody.getWorldPoint(new Vec2(3.5f, 5)));
+		s2.setSensorName("Back45Left");
+		s2.getSensorStatus();
+
 		//Back-Right 45º Parking Sensor
-		Vec2 s3p1 = new Vec2();
-		Vec2 s3p2 = new Vec2();
-		s3p1.set(carBody.getWorldPoint(new Vec2(-1.5f, 2.5f)));
-		s3p2.set(carBody.getWorldPoint(new Vec2(-3.5f, 5)));
-		s3p2.add(s3p1);
-		s3.init();
-		getWorld().raycast(s3, s3p1, s3p2);
-		
-		if (s3.m_hit){
-			getDebugDraw().drawPoint(s3.m_point, 5, new Color3f(0.4f, 0.9f, 0.4f));
-			getDebugDraw().drawSegment(s3p1, s3.m_point, new Color3f(0.9f, 0.9f, 0.9f));
-			addTextLine("S3 to obstacle: " + s3.m_point.clone().sub(s3p1).length());
-		}else{
-			getDebugDraw().drawSegment(s3p1, s3p2, new Color3f(0.9f, 0.9f, 0.9f));
-		}
-		
+		ParkingSensor s3 = new ParkingSensor(this, carBody.getWorldPoint(new Vec2(-1.5f, 2.5f)), carBody.getWorldPoint(new Vec2(-3.5f, 5)));
+		s3.setSensorName("Back45Right");
+		s3.getSensorStatus();
 	}
 	
 	@Override
