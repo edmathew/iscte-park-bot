@@ -39,7 +39,7 @@ import framework.TestbedSetting.SettingType;
  * @author Daniel Murphy
  */
 public class TestbedSettings {
-  public static final String Hz = "Hz";
+  public static final String Hz = "Update Delay";
   public static final String PositionIterations = "Pos Iters";
   public static final String VelocityIterations = "Vel Iters";
   public static final String WarmStarting = "Warm Starting";
