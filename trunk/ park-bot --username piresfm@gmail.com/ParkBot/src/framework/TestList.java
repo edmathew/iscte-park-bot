@@ -25,7 +25,7 @@
  * Created at 5:34:33 PM Jul 17, 2010
  */
 package framework;
-import main_stuff.MyCar;
+import main_stuff.CarTest;
 
 /**
  * @author Daniel Murphy
@@ -35,6 +35,6 @@ public class TestList {
   public static void populateModel(TestbedModel argModel){
       
       argModel.addCategory("Featured");
-      argModel.addTest(new MyCar());
+      argModel.addTest(new CarTest());
   }
 }
