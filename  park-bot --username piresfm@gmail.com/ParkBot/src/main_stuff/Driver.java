@@ -4,15 +4,15 @@ import java.awt.event.KeyEvent;
 import java.util.Random;
 
 import framework.TestbedTest;
-import main_stuff.MyCar;
+import main_stuff.CarTest;
 
 public class Driver extends Thread{
 	
-	private MyCar t;
+	private CarTest t;
 	private int sleep;
 	
 	public Driver(TestbedTest t, int hp, int sleep) {
-		this.t = (MyCar) t;
+		this.t = (CarTest) t;
 		this.t.setspeed(hp);
 		this.sleep = sleep;
 	}
