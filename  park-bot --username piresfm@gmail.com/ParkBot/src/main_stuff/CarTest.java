@@ -7,6 +7,7 @@ import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
+import org.jbox2d.dynamics.FixtureDef;
 import org.jbox2d.dynamics.World;
 
 import support.Car;
@@ -31,10 +32,8 @@ public class CarTest extends TestbedTest{
 	static float engineSpeed = 0;
 	static float steeringAngle = 0;
 
-	static World myWorld;
-	static AABB worldBox = new AABB();
-
 	Car car;
+	Body pspot;
 
 	public void setspeed(int hp) {
 		HORSPOWER = hp;
@@ -77,6 +76,18 @@ public class CarTest extends TestbedTest{
 		car.addFrontWheel(RIGHT_FRONT_WHEEL_POSITION);
 		car.addBackWheel(LEFT_REAR_WHEEL_POSITION);
 		car.addBackWheel(RIGHT_REAR_WHEEL_POSITION);
+		
+		//parking-spot
+		BodyDef pspotBodyDef = new BodyDef();
+		pspotBodyDef.position = new Vec2(22, 15);
+		pspotBodyDef.userData = 0;
+		pspot = getWorld().createBody(pspotBodyDef);
+		PolygonShape pspotShape = new PolygonShape();
+		pspotShape.setAsBox(2, 3);
+		FixtureDef pspotDef = new FixtureDef();
+		pspotDef.isSensor = true;
+		pspotDef.shape = pspotShape;
+		pspot.createFixture(pspotDef);
 
 	}
 
@@ -84,6 +95,9 @@ public class CarTest extends TestbedTest{
 	public void step(TestbedSettings settings){
 		super.step(settings);
 
+		//distance to parking spot center
+		addTextLine("Distance to center of parking spot: " + car.distanceTo(pspot));
+		
 		//Straight back parking sensor
 		ParkingSensor s1 = new ParkingSensor(this, car.getWorldPoint(new Vec2(0, 2.5f)),car.getWorldPoint(new Vec2(0, 6)));
 		s1.setSensorName("BackStraight");
@@ -167,6 +181,9 @@ public class CarTest extends TestbedTest{
 			break;
 		case KeyEvent.VK_RIGHT:
 			steeringAngle = -MAX_STEER_ANGLE;
+			break;
+		case KeyEvent.VK_O:
+			car.superBrake();
 			break;
 
 		}

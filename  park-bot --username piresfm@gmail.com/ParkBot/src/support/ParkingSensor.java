@@ -1,5 +1,8 @@
 package support;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+
 import library.RayCastClosestCallback;
 import main_stuff.CarTest;
 
@@ -27,7 +30,10 @@ public class ParkingSensor {
 		if(rccc.m_hit){
 			car.getDebugDraw().drawPoint(rccc.m_point, 5, new Color3f(0.4f, 0.9f, 0.4f));
 			car.getDebugDraw().drawSegment(p1, rccc.m_point, new Color3f(0.9f, 0.9f, 0.9f));
-			car.addTextLine(sensorName +" to obstacle: " + rccc.m_point.clone().sub(p1).length());
+			double d = rccc.m_point.clone().sub(p1).length();
+			BigDecimal bd = new BigDecimal(d);
+			bd = bd.setScale(1, BigDecimal.ROUND_DOWN);
+			car.addTextLine(sensorName +" to obstacle: " + bd.doubleValue());
 		}else{
 			car.getDebugDraw().drawSegment(p1, p2, new Color3f(0.9f, 0.9f, 0.9f));
 		}
