@@ -1,5 +1,6 @@
 package support;
 
+import java.math.BigDecimal;
 import java.util.LinkedList;
 
 import org.jbox2d.collision.shapes.PolygonShape;
@@ -18,8 +19,6 @@ public class Car {
 	World world;
 	Body chassis;
 	Body windshield;
-	Body frontLeftWheel;
-	Body frontRightWheel;
 
 	LinkedList<Body> frontWheels = new LinkedList<Body>();
 	LinkedList<Body> backWheels = new LinkedList<Body>();
@@ -161,6 +160,21 @@ public class Car {
 		
 		for (Body w: getWheels())
 			w.setLinearVelocity(direction_list.pop());
+	}
+
+	public float distanceTo(Body pspot) {
+		Vec2 temp = chassis.getWorldCenter();
+		double d = temp.sub(pspot.getWorldCenter()).length();
+		BigDecimal bd = new BigDecimal(d);
+		bd = bd.setScale(1, BigDecimal.ROUND_DOWN);
+		return (float) bd.doubleValue();
+	}
+
+	public void superBrake() {
+		chassis.setLinearVelocity(new Vec2(0, 0));
+		windshield.setLinearVelocity(new Vec2());
+		for (Body w: getWheels())
+			w.setLinearVelocity(new Vec2(0, 0));
 	}
 
 
