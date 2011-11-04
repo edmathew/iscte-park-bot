@@ -60,7 +60,7 @@ public class TestbedMain {
     testbed.setVisible(true);
     testbed.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     
-    Driver stig = new Driver(model.getTest(), 100, 250);
+    Driver stig = new Driver(model.getTest(), 50, 250);
     
     stig.start();
   }
