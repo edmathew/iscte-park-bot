@@ -11,22 +11,25 @@ import org.jbox2d.common.Vec2;
 
 public class ParkingSensor {
 	private String sensorName;
+	private Vec2 v1 = new Vec2();
+	private Vec2 v2 = new Vec2();
 	private Vec2 p1 = new Vec2();
 	private Vec2 p2 = new Vec2();
 	private CarTest car;
 	private RayCastClosestCallback rccc;
 
-	public ParkingSensor(CarTest car, Vec2 p1, Vec2 p2) {
-		this.p1.set(p1);
-		this.p2.set(p2);
-		this.p2.add(p1);
+	public ParkingSensor(CarTest car, String name, Vec2 v1, Vec2 v2) {
+		this.sensorName = name;
+		this.v1.set(v1);
+		this.v2.set(v2);
+		this.v2.add(v1);
 		this.car = car;
-		rccc = new RayCastClosestCallback();
-		rccc.init();
-		car.getWorld().raycast(rccc, p1, p2);
 	}
 
 	public void getSensorStatus() {
+		rccc = new RayCastClosestCallback();
+		rccc.init();
+		car.getWorld().raycast(rccc, p1, p2);
 		if(rccc.m_hit){
 			car.getDebugDraw().drawPoint(rccc.m_point, 5, new Color3f(0.4f, 0.9f, 0.4f));
 			car.getDebugDraw().drawSegment(p1, rccc.m_point, new Color3f(0.9f, 0.9f, 0.9f));
@@ -45,6 +48,12 @@ public class ParkingSensor {
 	
 	public String getSensorName() {
 		return sensorName;
+	}
+
+	public void updatePosition(Car car) {
+		p1.set(car.getWorldPoint(v1));
+		p2.set(car.getWorldPoint(v2));
+		p2.add(p1);
 	}
 	
 	

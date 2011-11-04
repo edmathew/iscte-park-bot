@@ -1,5 +1,6 @@
 package main_stuff;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 
 
 import org.jbox2d.collision.AABB;
@@ -12,6 +13,7 @@ import org.jbox2d.dynamics.World;
 
 import support.Car;
 import support.ParkingSensor;
+import support.Tagger;
 import framework.TestbedSettings;
 import framework.TestbedTest;
 
@@ -29,11 +31,20 @@ public class CarTest extends TestbedTest{
 	final static Vec2 LEFT_FRONT_WHEEL_POSITION = new Vec2(-1.5f, -1.9f);
 	final static Vec2 RIGHT_FRONT_WHEEL_POSITION = new Vec2(1.5f, -1.9f);
 
+	final static Vec2 PARKING_SPOT_POSITION = new Vec2(22,15);
+	final static Vec2 TOP_LEFT_TAG = new Vec2(-0.9f,2);
+	final static Vec2 TOP_RIGHT_TAG = new Vec2(0.9f,2);
+	final static Vec2 CENTER_TAG = new Vec2();
+	final static Vec2 BOTTOM_LEFT_TAG = new Vec2(-0.5f,-2);
+	final static Vec2 BOTTOM_RIGHT_TAG = new Vec2(0.5f, -2);
+
+
 	static float engineSpeed = 0;
 	static float steeringAngle = 0;
 
 	Car car;
 	Body pspot;
+	LinkedList<Body> tags = new LinkedList<Body>();
 
 	public void setspeed(int hp) {
 		HORSPOWER = hp;
@@ -67,6 +78,15 @@ public class CarTest extends TestbedTest{
 
 		pSpot.setAsEdge(new Vec2(20,10), new Vec2(20, 0));
 		ground.createFixture(pSpot, 1);
+		
+		pSpot.setAsEdge(new Vec2(20, 10), new Vec2(30, 10));
+		ground.createFixture(pSpot,1);
+		
+		pSpot.setAsEdge(new Vec2(20, 20), new Vec2(30, 20));
+		ground.createFixture(pSpot,1);
+		
+		pSpot.setAsEdge(new Vec2(25, 10), new Vec2(25, 20));
+		ground.createFixture(pSpot,1);
 
 		//creating car body
 		car = new Car(getWorld(), CAR_STARTING_POSITION);
@@ -76,19 +96,49 @@ public class CarTest extends TestbedTest{
 		car.addFrontWheel(RIGHT_FRONT_WHEEL_POSITION);
 		car.addBackWheel(LEFT_REAR_WHEEL_POSITION);
 		car.addBackWheel(RIGHT_REAR_WHEEL_POSITION);
-		
-		//parking-spot
-		BodyDef pspotBodyDef = new BodyDef();
-		pspotBodyDef.position = new Vec2(22, 15);
-		pspotBodyDef.userData = 0;
-		pspot = getWorld().createBody(pspotBodyDef);
-		PolygonShape pspotShape = new PolygonShape();
-		pspotShape.setAsBox(2, 3);
-		FixtureDef pspotDef = new FixtureDef();
-		pspotDef.isSensor = true;
-		pspotDef.shape = pspotShape;
-		pspot.createFixture(pspotDef);
 
+		//parking sensors
+		car.addParkingSensor(new ParkingSensor(this, "BackStraight", new Vec2(0, 2.5f),new Vec2(0, 6)));
+		car.addParkingSensor(new ParkingSensor(this, "Back45Left", new Vec2(1.5f, 2.5f), new Vec2(3.5f, 5)));
+		car.addParkingSensor(new ParkingSensor(this, "Back45Right", new Vec2(-1.5f, 2.5f), new Vec2(-3.5f, 5)));
+		car.addParkingSensor(new ParkingSensor(this, "FrontStraight", new Vec2(0, -2.5f),new Vec2(0, -6)));
+		car.addParkingSensor(new ParkingSensor(this, "Front45Left", new Vec2(1.5f, -2.5f), new Vec2(3.5f, -5)));
+		car.addParkingSensor(new ParkingSensor(this, "Front45Right", new Vec2(-1.5f, -2.5f), new Vec2(-3.5f, -5)));
+		car.addParkingSensor(new ParkingSensor(this, "LeftSide1", new Vec2(1.7f, -1.9f), new Vec2(4.7f, -1.9f)));
+		car.addParkingSensor(new ParkingSensor(this, "LeftSide2", new Vec2(1.7f, 1.9f), new Vec2(4.7f, 1.9f)));
+		car.addParkingSensor(new ParkingSensor(this, "RightSide1", new Vec2(-1.7f, -1.9f), new Vec2(-4.7f, -1.9f)));
+		car.addParkingSensor(new ParkingSensor(this, "RightSide2", new Vec2(-1.7f, 1.9f), new Vec2(-4.7f, 1.9f)));
+
+		//parking-spot tag detectors
+		car.addTagger("1001", TOP_LEFT_TAG);
+		car.addTagger("1002", TOP_RIGHT_TAG);
+		car.addTagger("1003", CENTER_TAG);
+		car.addTagger("1004", BOTTOM_LEFT_TAG);
+		car.addTagger("1005", BOTTOM_RIGHT_TAG);
+
+		//parking-spot
+		createParkingSpotTags();
+
+
+
+	}
+
+	private void createParkingSpotTags() {
+		for (Tagger t : car.getTaggers()){
+			BodyDef tbd = new BodyDef();
+			tbd.position = PARKING_SPOT_POSITION.clone().add(t.getRelativePosition());
+			tbd.userData = Integer.parseInt(t.getName());
+			Body tb = getWorld().createBody(tbd);
+
+			PolygonShape ts = new PolygonShape();
+			ts.setAsBox(0.25f, 0.25f);
+			FixtureDef tfd = new FixtureDef();
+			tfd.isSensor = true;
+			tfd.shape = ts;
+			tb.createFixture(tfd);
+			tags.add(tb);
+
+		}
 	}
 
 	@Override
@@ -96,57 +146,11 @@ public class CarTest extends TestbedTest{
 		super.step(settings);
 
 		//distance to parking spot center
-		addTextLine("Distance to center of parking spot: " + car.distanceTo(pspot));
-		
-		//Straight back parking sensor
-		ParkingSensor s1 = new ParkingSensor(this, car.getWorldPoint(new Vec2(0, 2.5f)),car.getWorldPoint(new Vec2(0, 6)));
-		s1.setSensorName("BackStraight");
-		s1.getSensorStatus();
+				addTextLine("Distance to center of parking spot: " + car.distanceTo(tags));
 
-		//Back-Left 45º Parking Sensor
-		ParkingSensor s2 = new ParkingSensor(this, car.getWorldPoint(new Vec2(1.5f, 2.5f)), car.getWorldPoint(new Vec2(3.5f, 5)));
-		s2.setSensorName("Back45Left");
-		s2.getSensorStatus();
+		car.updateSensorPositions(car);
+		car.getSensorStatus();
 
-		//Back-Right 45º Parking Sensor
-		ParkingSensor s3 = new ParkingSensor(this, car.getWorldPoint(new Vec2(-1.5f, 2.5f)), car.getWorldPoint(new Vec2(-3.5f, 5)));
-		s3.setSensorName("Back45Right");
-		s3.getSensorStatus();
-
-		//Straight front parking sensor
-		ParkingSensor s4 = new ParkingSensor(this, car.getWorldPoint(new Vec2(0, -2.5f)),car.getWorldPoint(new Vec2(0, -6)));
-		s4.setSensorName("FrontStraight");
-		s4.getSensorStatus();
-
-		//Front-Left 45º Parking Sensor
-		ParkingSensor s5 = new ParkingSensor(this, car.getWorldPoint(new Vec2(1.5f, -2.5f)), car.getWorldPoint(new Vec2(3.5f, -5)));
-		s5.setSensorName("Front45Left");
-		s5.getSensorStatus();
-
-		//Front-Right 45º Parking Sensor
-		ParkingSensor s6 = new ParkingSensor(this, car.getWorldPoint(new Vec2(-1.5f, -2.5f)), car.getWorldPoint(new Vec2(-3.5f, -5)));
-		s6.setSensorName("Front45Right");
-		s6.getSensorStatus();
-
-		//Left-Side Parking Sensor 1
-		ParkingSensor s7 = new ParkingSensor(this, car.getWorldPoint(new Vec2(1.7f, -1.9f)), car.getWorldPoint(new Vec2(4.7f, -1.9f)));
-		s7.setSensorName("LeftSide1");
-		s7.getSensorStatus();
-
-		//Left-Side Parking Sensor 2
-		ParkingSensor s8 = new ParkingSensor(this, car.getWorldPoint(new Vec2(1.7f, 1.9f)), car.getWorldPoint(new Vec2(4.7f, 1.9f)));
-		s8.setSensorName("LeftSide2");
-		s8.getSensorStatus();
-
-		//Left-Side Parking Sensor 1
-		ParkingSensor s9 = new ParkingSensor(this, car.getWorldPoint(new Vec2(-1.7f, -1.9f)), car.getWorldPoint(new Vec2(-4.7f, -1.9f)));
-		s9.setSensorName("RightSide1");
-		s9.getSensorStatus();
-
-		//Left-Side Parking Sensor 2
-		ParkingSensor s10 = new ParkingSensor(this, car.getWorldPoint(new Vec2(-1.7f, 1.9f)), car.getWorldPoint(new Vec2(-4.7f, 1.9f)));
-		s10.setSensorName("RightSide2");
-		s10.getSensorStatus();
 	}
 
 	@Override

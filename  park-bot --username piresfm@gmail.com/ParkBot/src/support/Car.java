@@ -3,11 +3,13 @@ package support;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 
+import org.jbox2d.collision.shapes.CircleShape;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
+import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.World;
 import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.JointDef;
@@ -23,6 +25,8 @@ public class Car {
 	LinkedList<Body> frontWheels = new LinkedList<Body>();
 	LinkedList<Body> backWheels = new LinkedList<Body>();
 	LinkedList<RevoluteJoint> frontWheelJoints = new LinkedList<RevoluteJoint>();
+	LinkedList<ParkingSensor> parkingSensors = new LinkedList<ParkingSensor>();
+	LinkedList<Tagger> taggers = new LinkedList<Tagger>();
 
 	public Car(World world, Vec2 position) {
 		this.world = world;
@@ -143,31 +147,30 @@ public class Car {
 	}
 
 	public void killOrthogonalVelocity() {
-		/*
-		 * weird code for the same reason as in drive method
-		 */
-		LinkedList<Vec2> direction_list = new LinkedList<Vec2>();
-		for (Body w: getWheels()){
-			Vec2 localPoint = new Vec2(0,0);
-			Vec2 velocity = w.getLinearVelocityFromLocalPoint(localPoint);
-
-			Vec2 sidewaysAxis = w.getTransform().R.col2.clone();
-			float dotter = velocity.x * sidewaysAxis.x + velocity.y * sidewaysAxis.y;
-			sidewaysAxis.x *= dotter;
-			sidewaysAxis.y *= dotter;
-			direction_list.add(sidewaysAxis);
-		}
-		
 		for (Body w: getWheels())
-			w.setLinearVelocity(direction_list.pop());
+			killBodyOrthogonalVelocity(w);
+	}
+	
+	private void killBodyOrthogonalVelocity(Body b){
+		Vec2 localPoint = new Vec2(0,0);
+		Vec2 velocity = b.getLinearVelocityFromLocalPoint(localPoint);
+
+		Vec2 sidewaysAxis = b.getTransform().R.col2.clone();
+		float dotter = velocity.x * sidewaysAxis.x + velocity.y * sidewaysAxis.y;
+		sidewaysAxis.x *= dotter;
+		sidewaysAxis.y *= dotter;
+		b.setLinearVelocity(sidewaysAxis);
 	}
 
-	public float distanceTo(Body pspot) {
-		Vec2 temp = chassis.getWorldCenter();
-		double d = temp.sub(pspot.getWorldCenter()).length();
-		BigDecimal bd = new BigDecimal(d);
-		bd = bd.setScale(1, BigDecimal.ROUND_DOWN);
-		return (float) bd.doubleValue();
+	public float distanceTo(LinkedList<Body> tags) {
+		float fitness = 0;
+		for (Body b: tags){
+			for (Tagger t: taggers){
+				if (b.getUserData().toString().equals(t.getName()))
+					fitness += (t.getTaggerBody().getPosition().clone().sub(b.getPosition()).length());
+			}
+		}
+		return fitness;
 	}
 
 	public void superBrake() {
@@ -175,6 +178,42 @@ public class Car {
 		windshield.setLinearVelocity(new Vec2());
 		for (Body w: getWheels())
 			w.setLinearVelocity(new Vec2(0, 0));
+	}
+
+	public void addParkingSensor(ParkingSensor parkingSensor) {
+		parkingSensors.add(parkingSensor);
+	}
+
+	public void getSensorStatus() {
+		for(ParkingSensor p: parkingSensors)
+			p.getSensorStatus();
+	}
+
+	public void updateSensorPositions(Car car) {
+		for(ParkingSensor p: parkingSensors)
+			p.updatePosition(car);
+	}
+
+	public void addTagger(String tagName, Vec2 position) {
+		BodyDef tbd = new BodyDef();
+		tbd.position = chassis.getPosition().clone().add(position);
+		tbd.type = BodyType.DYNAMIC;
+		Tagger t = new Tagger(tagName, create(tbd), position);
+		taggers.add(t);
+		
+		CircleShape ts = new CircleShape();
+		ts.m_radius = 0.2f;
+		t.getTaggerBody().createFixture(ts,1);
+		
+		PrismaticJointDef tjd = new PrismaticJointDef();
+		tjd.initialize(chassis, t.getTaggerBody(), t.getTaggerBody().getWorldCenter(), new Vec2(1, 0));
+		tjd.enableLimit = true;
+		tjd.lowerTranslation = tjd.upperTranslation = 0;
+		create(tjd);
+	}
+	
+	public LinkedList<Tagger> getTaggers() {
+		return taggers;
 	}
 
 

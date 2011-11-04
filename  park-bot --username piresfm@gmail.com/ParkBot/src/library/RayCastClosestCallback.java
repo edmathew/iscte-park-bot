@@ -20,7 +20,7 @@ public class RayCastClosestCallback implements RayCastCallback {
 		Object userData = body.getUserData();
 		if (userData != null) {
 			int index = (Integer) userData;
-			if (index == 0) {
+			if (index == 0 || (index > 1000 && index < 1010)) {
 				// filter
 				return -1f;
 			}
