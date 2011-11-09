@@ -8,7 +8,7 @@ import feed_fwd.train.Train;
 import feed_fwd.train.back_propagation.Backpropagation;
 import genetic.GeneticAlgorithm;
 
-public class Brain {
+public class AndTest {
 	public static void main(String[] args) {
 		
 		double[][] AND_INPUT = {
