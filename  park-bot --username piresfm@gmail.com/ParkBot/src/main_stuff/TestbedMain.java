@@ -43,25 +43,26 @@ import framework.TestbedPanel;
  * @author Daniel Murphy
  */
 public class TestbedMain {
-  private static final Logger log = LoggerFactory.getLogger(TestbedMain.class);
+	private static final Logger log = LoggerFactory.getLogger(TestbedMain.class);
+	public static Driver myDriver = null;
 
-  public static void main(String[] args) {
-    try {
-      UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-    } catch (Exception e) {
-      log.warn("Could not set the look and feel to nimbus.  "
-          + "Hopefully you're on a mac so the window isn't ugly as crap.");
-    }
-    TestbedModel model = new TestbedModel();
-    TestbedPanel panel = new TestPanelJ2D(model);
-    TestList.populateModel(model);
-    JFrame testbed = new TestbedFrame(model, panel);
-    
-    testbed.setVisible(true);
-    testbed.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    
-    Driver stig = new Driver(model.getTest(), 50, 250);
-    
-        stig.start();
-  }
+	public static void main(String[] args) {
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+		} catch (Exception e) {
+			log.warn("Could not set the look and feel to nimbus.  "
+					+ "Hopefully you're on a mac so the window isn't ugly as crap.");
+		}
+		TestbedModel model = new TestbedModel();
+		TestbedPanel panel = new TestPanelJ2D(model);
+		TestList.populateModel(model);
+		JFrame testbed = new TestbedFrame(model, panel);
+
+		testbed.setVisible(true);
+		testbed.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		Driver stig = new Driver(model.getTest(), 50, 250);
+		myDriver = stig;
+		stig.start();
+	}
 }

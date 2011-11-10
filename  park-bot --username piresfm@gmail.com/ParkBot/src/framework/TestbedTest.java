@@ -34,6 +34,8 @@ import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
+import main_stuff.TestbedMain;
+
 import org.jbox2d.callbacks.ContactImpulse;
 import org.jbox2d.callbacks.ContactListener;
 import org.jbox2d.callbacks.DebugDraw;
@@ -228,8 +230,10 @@ public abstract class TestbedTest implements ContactListener, ObjectListener, Ob
       setCamera(getDefaultCameraPos(), getDefaultCameraScale());
     }
     setTitle(getTestName());
-
     initTest(argDeserialized);
+    synchronized (TestbedMain.myDriver) {
+		TestbedMain.myDriver.notifyAll();
+	}
   }
 
   public World getWorld() {
