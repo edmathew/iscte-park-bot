@@ -8,6 +8,7 @@ public class FeedForward {
 	private FeedForwardLayer firstLayer = null;
 	private FeedForwardLayer lastLayer = null;
 	private List<FeedForwardLayer> allLayers = new ArrayList<FeedForwardLayer>();
+	private float fitness = 0;
 	
 	public FeedForward(){
 		
@@ -39,5 +40,18 @@ public class FeedForward {
 				ffl.calculate(null);
 		}
 		return lastLayer.getCharge();
+	}
+	
+	public float getFitness() {
+		return fitness;
+	}
+	
+	public void setFitness(float fitness) {
+		this.fitness = fitness;
+	}
+
+	public void randomize() {
+		for (FeedForwardLayer ffl : allLayers)
+			ffl.randomize();
 	}
 }

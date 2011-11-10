@@ -62,6 +62,6 @@ public class TestbedMain {
     
     Driver stig = new Driver(model.getTest(), 50, 250);
     
-    stig.start();
+        stig.start();
   }
 }
