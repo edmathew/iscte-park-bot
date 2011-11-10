@@ -59,7 +59,7 @@ public class Driver extends Thread{
 	public synchronized void start() {
 		super.start();
 		Brain b = new Brain();
-//		int numberOfSensors = t.returnSensorStatus().length;
+		int numberOfSensors = t.returnSensorStatus().length;
 		b.createStarterNetworks(10, 9);
 		for(FeedForward ff: b.getNeuralNetworks()){
 			while (!t.isColliding()){

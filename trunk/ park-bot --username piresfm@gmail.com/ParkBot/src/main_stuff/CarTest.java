@@ -205,9 +205,6 @@ public class CarTest extends TestbedTest{
 	}
 	
 	public double[] returnSensorStatus(){
-		double[] temp = {-1,-1};
-		if (car == null)
-			return temp;
 		return car.SensorStatusInDouble();
 	}
 }
