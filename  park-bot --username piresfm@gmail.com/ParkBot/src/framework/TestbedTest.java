@@ -91,10 +91,15 @@ public abstract class TestbedTest implements ContactListener, ObjectListener, Ob
       points[i] = new ContactPoint();
     }
   }
+  
+  public int getContactPoints(){
+	  return points.length;
+  }
 
   /**
    * Only visible for compatibility. Should use {@link #getWorld()} instead.
    */
+  
   protected World m_world;
   private Body groundBody;
   private MouseJoint mouseJoint;
@@ -979,4 +984,5 @@ class ListenerAdapter implements ObjectListener {
   public void processJoint(Joint argJoint, Long argTag) {
     listener.processJoint(argJoint, argTag);
   }
+  
 }

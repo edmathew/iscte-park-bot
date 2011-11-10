@@ -11,6 +11,7 @@ import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
 import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.World;
+import org.jbox2d.dynamics.contacts.ContactEdge;
 import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.JointDef;
 import org.jbox2d.dynamics.joints.PrismaticJointDef;
@@ -216,6 +217,13 @@ public class Car {
 		return taggers;
 	}
 
-
-
+	public double[] SensorStatusInDouble() {
+		double[] temp = new double[parkingSensors.size()];
+		
+		for (int i = 0; i < parkingSensors.size(); i++){
+			temp[i] = parkingSensors.get(i).getSensorDistanceToObject();
+		}
+		return temp;
+	}
+	
 }

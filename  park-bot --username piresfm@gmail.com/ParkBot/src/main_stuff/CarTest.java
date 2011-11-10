@@ -42,10 +42,15 @@ public class CarTest extends TestbedTest{
 	static float engineSpeed = 0;
 	static float steeringAngle = 0;
 
-	Car car;
+	private Car car;
 	Body pspot;
 	LinkedList<Body> tags = new LinkedList<Body>();
 
+	
+	public boolean isColliding(){
+		return super.getPointCount() > 0;
+	}
+	
 	public void setspeed(int hp) {
 		HORSPOWER = hp;
 	}
@@ -150,6 +155,7 @@ public class CarTest extends TestbedTest{
 
 		car.updateSensorPositions(car);
 		car.getSensorStatus();
+		addTextLine("Colliding? " + super.getPointCount());
 
 	}
 
@@ -196,5 +202,12 @@ public class CarTest extends TestbedTest{
 	@Override
 	public String getTestName() {
 		return "ParkBot";
+	}
+	
+	public double[] returnSensorStatus(){
+		double[] temp = {-1,-1};
+		if (car == null)
+			return temp;
+		return car.SensorStatusInDouble();
 	}
 }

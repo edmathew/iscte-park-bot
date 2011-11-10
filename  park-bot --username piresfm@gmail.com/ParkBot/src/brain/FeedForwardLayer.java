@@ -1,5 +1,9 @@
 package brain;
 
+import java.util.Random;
+
+import activation.ActivationFunction;
+import activation.ActivationSigmoid;
 import matrix.Matrix;
 import matrix.MatrixMath;
 
@@ -9,11 +13,16 @@ public class FeedForwardLayer {
 	private double[] charge;
 	private FeedForwardLayer previousLayer;
 	private FeedForwardLayer nextLayer;
+	private ActivationFunction activationFunction;
 
 	public FeedForwardLayer(int neuronNumber){
+		this(neuronNumber, new ActivationSigmoid());
+	}
+
+	public FeedForwardLayer(int neuronNumber, ActivationFunction function){
 		this.neuronNumber = neuronNumber;
 		charge = new double[neuronNumber];
-
+		this.activationFunction = function;
 	}
 
 	public void setMatrix(Matrix matrix){
@@ -61,11 +70,29 @@ public class FeedForwardLayer {
 	}
 
 	private void setCharge(int pos, double charge) {
-		this.charge[pos] = charge;
+		//que carga é que estes neurónios vão passar aos neurónios da camada seguinte?
+		//vai depender da função de activação
+		if (!isOutput())
+			this.charge[pos] = activationFunction.activationFunction(charge);
+		else
+			this.charge[pos] = charge;
 	}
 
 	public double[] getCharge() {
 		return charge;
+	}
+
+	public void randomize() {
+		if (previousLayer != null){
+			Random r = new Random();
+
+			double[][] temp = new double[previousLayer.charge.length][neuronNumber];
+			for (int i = 0; i < previousLayer.charge.length; i++){
+				for (int j = 0 ; j < neuronNumber; j++){
+					temp[i][j] = r.nextDouble();
+				}
+			}
+		}
 	}
 
 }
