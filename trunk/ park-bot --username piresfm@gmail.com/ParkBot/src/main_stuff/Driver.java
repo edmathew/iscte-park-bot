@@ -1,7 +1,13 @@
 package main_stuff;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.Random;
+
+import javax.swing.Timer;
+
+import org.jbox2d.common.MathUtils;
 
 import brain.Brain;
 import brain.FeedForward;
@@ -13,6 +19,7 @@ public class Driver extends Thread{
 
 	private CarTest t;
 	private int sleep;
+	boolean timerRanOut = false;
 
 	public Driver(TestbedTest t, int hp, int sleep) {
 		this.t = (CarTest) t;
@@ -66,35 +73,63 @@ public class Driver extends Thread{
 		Brain b = new Brain();
 		int numberOfSensors = t.returnSensorStatus().length;
 		b.createStarterNetworks(numberOfSensors, 9);
+		int c = 0;
 		for(FeedForward ff: b.getNeuralNetworks()){
-			while (!t.isColliding()){
+			System.out.println("trying network #"+(++c) + "...");
+			try {
+				wait(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("GO!");
+			timerRanOut = false;
+			Timer timer = new Timer(5000, new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					timerRanOut = true;
+				}
+			});
+			timer.start();
+			while (!t.isColliding() && timerRanOut == false){
 				actuate(ff.calculate(t.returnSensorStatus()));
 			}
+			timer.stop();
 			t.reset();
+			CarTest ct = (CarTest)t;
+			ct.carReset();
 		}
 		System.out.println("no more neural networks to test");
 
 	}
 
 	private void actuate(double[] calculate) {
-		if(calculate[0] > 0.5)
+		double average = calculateAverage(calculate); 
+		if(calculate[0] > average)
 			accelerate();
-		if(calculate[1] > 0.5)
+		if(calculate[1] > average)
 			release_acceleration();
-		if(calculate[2] > 0.5)
+		if(calculate[2] > average)
 			reverse();
-		if(calculate[3] > 0.5)
+		if(calculate[3] > average)
 			release_reverse();
-		if(calculate[4] > 0.5)
+		if(calculate[4] > average)
 			brake();
-		if(calculate[5] > 0.5)
+		if(calculate[5] > average)
 			release_brake();						
-		if(calculate[6] > 0.5)
+		if(calculate[6] > average)
 			turn_left();
-		if(calculate[7] > 0.5)
+		if(calculate[7] > average)
 			turn_right();
-		if(calculate[8] > 0.5)
+		if(calculate[8] > average)
 			reset_steering();
+	}
+
+	private double calculateAverage(double[] calculate) {
+		double temp = 0.0;
+		for (int i = 0; i < calculate.length; i++)
+			temp += calculate[i];
+		return temp/calculate.length;
 	}	
 
 }
