@@ -57,10 +57,15 @@ public class Driver extends Thread{
 	}
 	@Override
 	public synchronized void start() {
+		try {
+			this.wait();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		super.start();
 		Brain b = new Brain();
 		int numberOfSensors = t.returnSensorStatus().length;
-		b.createStarterNetworks(10, 9);
+		b.createStarterNetworks(numberOfSensors, 9);
 		for(FeedForward ff: b.getNeuralNetworks()){
 			while (!t.isColliding()){
 				actuate(ff.calculate(t.returnSensorStatus()));
