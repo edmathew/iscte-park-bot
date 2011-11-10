@@ -57,15 +57,15 @@ public class FeedForwardLayer {
 			//layers restantes, usa a carga das layers anteriores para dar input aos seus neurónios
 			//ponderar no novo módulo de matrizes devolver as colunas inteiras para permitir iteração
 			for (int i = 0 ; i < matrix.getCols(); i++){
-				Matrix inputm = formMatrix(previousLayer.getCharge());
-				Matrix m = formMatrix(matrix.getCol(i).toPackedArray());
-				System.out.println("Calculating dot product between");
-				printMatrix(inputm);
-				System.out.println("and");
-				printMatrix(m);
+//				Matrix inputm = formMatrix(previousLayer.getCharge());
+//				Matrix m = formMatrix(matrix.getCol(i).toPackedArray());
+//				System.out.println("Calculating dot product between");
+//				printMatrix(inputm);
+//				System.out.println("and");
+//				printMatrix(m);
 				
 				this.setCharge(i, MatrixMath.dotProduct(formMatrix(previousLayer.getCharge()), matrix.getCol(i)));
-				System.out.println("result = " + MatrixMath.dotProduct(inputm, m));
+//				System.out.println("result = " + MatrixMath.dotProduct(inputm, m));
 			}
 		}
 	}

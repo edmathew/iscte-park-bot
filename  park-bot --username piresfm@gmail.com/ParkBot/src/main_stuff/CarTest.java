@@ -207,4 +207,9 @@ public class CarTest extends TestbedTest{
 	public double[] returnSensorStatus(){
 		return car.SensorStatusInDouble();
 	}
+
+	public void carReset() {
+		engineSpeed = 0;
+		steeringAngle = 0;
+	}
 }
