@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Brain {
-	private static final int NUMBER_OF_STARTER_NETWORKS = 10;
+	private static final int NUMBER_OF_STARTER_NETWORKS = 100;
 	private List<FeedForward> neuralNetworks = new ArrayList<FeedForward>();
 	
 	

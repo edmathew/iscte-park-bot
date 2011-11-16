@@ -17,7 +17,7 @@ public class ParkingSensor {
 	private Vec2 p2 = new Vec2();
 	private CarTest car;
 	private RayCastClosestCallback rccc;
-	double last_recorded_distance;
+	double last_recorded_distance = 3.1;
 
 	public ParkingSensor(CarTest car, String name, Vec2 v1, Vec2 v2) {
 		this.sensorName = name;
@@ -41,7 +41,7 @@ public class ParkingSensor {
 			last_recorded_distance = bd.doubleValue();
 		}else{
 			car.getDebugDraw().drawSegment(p1, p2, new Color3f(0.9f, 0.9f, 0.9f));
-			last_recorded_distance = 9999;
+			last_recorded_distance = 3.1;
 		}
 	}
 	

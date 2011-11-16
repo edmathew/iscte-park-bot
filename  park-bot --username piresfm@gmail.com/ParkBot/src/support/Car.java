@@ -164,7 +164,7 @@ public class Car {
 	}
 
 	public float distanceTo(LinkedList<Body> tags) {
-		float fitness = 0;
+		float fitness = 0.0f;
 		for (Body b: tags){
 			for (Tagger t: taggers){
 				if (b.getUserData().toString().equals(t.getName()))
@@ -224,6 +224,10 @@ public class Car {
 			temp[i] = parkingSensors.get(i).getSensorDistanceToObject();
 		}
 		return temp;
+	}
+
+	public void reset() {
+		taggers = new LinkedList<Tagger>();
 	}
 	
 }
