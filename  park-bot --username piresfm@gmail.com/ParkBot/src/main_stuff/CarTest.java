@@ -103,16 +103,16 @@ public class CarTest extends TestbedTest{
 		car.addBackWheel(RIGHT_REAR_WHEEL_POSITION);
 
 		//parking sensors
-		car.addParkingSensor(new ParkingSensor(this, "BackStraight", new Vec2(0, 2.5f),new Vec2(0, 6)));
+		car.addParkingSensor(new ParkingSensor(this, "BackStraight", new Vec2(0, 2.5f),new Vec2(0, 5.7f)));
 		car.addParkingSensor(new ParkingSensor(this, "Back45Left", new Vec2(1.5f, 2.5f), new Vec2(3.5f, 5)));
 		car.addParkingSensor(new ParkingSensor(this, "Back45Right", new Vec2(-1.5f, 2.5f), new Vec2(-3.5f, 5)));
-		car.addParkingSensor(new ParkingSensor(this, "FrontStraight", new Vec2(0, -2.5f),new Vec2(0, -6)));
+		car.addParkingSensor(new ParkingSensor(this, "FrontStraight", new Vec2(0, -2.5f),new Vec2(0, -5.7f)));
 		car.addParkingSensor(new ParkingSensor(this, "Front45Left", new Vec2(1.5f, -2.5f), new Vec2(3.5f, -5)));
 		car.addParkingSensor(new ParkingSensor(this, "Front45Right", new Vec2(-1.5f, -2.5f), new Vec2(-3.5f, -5)));
-		car.addParkingSensor(new ParkingSensor(this, "LeftSide1", new Vec2(1.7f, -1.9f), new Vec2(4.7f, -1.9f)));
-		car.addParkingSensor(new ParkingSensor(this, "LeftSide2", new Vec2(1.7f, 1.9f), new Vec2(4.7f, 1.9f)));
-		car.addParkingSensor(new ParkingSensor(this, "RightSide1", new Vec2(-1.7f, -1.9f), new Vec2(-4.7f, -1.9f)));
-		car.addParkingSensor(new ParkingSensor(this, "RightSide2", new Vec2(-1.7f, 1.9f), new Vec2(-4.7f, 1.9f)));
+		car.addParkingSensor(new ParkingSensor(this, "LeftSide1", new Vec2(1.7f, -1.9f), new Vec2(4.9f, -1.9f)));
+		car.addParkingSensor(new ParkingSensor(this, "LeftSide2", new Vec2(1.7f, 1.9f), new Vec2(4.9f, 1.9f)));
+		car.addParkingSensor(new ParkingSensor(this, "RightSide1", new Vec2(-1.7f, -1.9f), new Vec2(-4.9f, -1.9f)));
+		car.addParkingSensor(new ParkingSensor(this, "RightSide2", new Vec2(-1.7f, 1.9f), new Vec2(-4.9f, 1.9f)));
 
 		//parking-spot tag detectors
 		car.addTagger("1001", TOP_LEFT_TAG);
@@ -151,7 +151,7 @@ public class CarTest extends TestbedTest{
 		super.step(settings);
 
 		//distance to parking spot center
-				addTextLine("Distance to center of parking spot: " + car.distanceTo(tags));
+				addTextLine("Distance to center of parking spot: " + car.distanceTo(tags) + " nTaggerss: " + car.getTaggers().size() + "nTags: " + tags.size());
 
 		car.updateSensorPositions(car);
 		car.getSensorStatus();
@@ -211,5 +211,6 @@ public class CarTest extends TestbedTest{
 	public void carReset() {
 		engineSpeed = 0;
 		steeringAngle = 0;
+		tags = new LinkedList<Body>();
 	}
 }
