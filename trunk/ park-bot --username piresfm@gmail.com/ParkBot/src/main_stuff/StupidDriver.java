@@ -10,6 +10,7 @@ import javax.swing.Timer;
 import org.jbox2d.common.MathUtils;
 
 import activation.ActivationLinear;
+import activation.ActivationThreshold;
 import brain.Brain;
 import brain.FeedForward;
 import brain.FeedForwardLayer;
@@ -17,12 +18,22 @@ import brain.FeedForwardLayer;
 import feed_fwd.FeedforwardLayer;
 import framework.TestbedTest;
 import main_stuff.CarTest;
+import matrix.Matrix;
 
 public class StupidDriver extends Thread{
 
 	private CarTest t;
 	private int sleep;
 	boolean timerRanOut = false;
+	double matrix_1[][] = {
+			{1,0},
+			{0,1}
+	};
+	
+	double matrix_2[][] = {
+			{1,0},
+			{0,1}
+	};
 
 	public StupidDriver(TestbedTest t, int hp, int sleep) {
 		this.t = (CarTest) t;
@@ -75,19 +86,23 @@ public class StupidDriver extends Thread{
 		super.start();
 		
 		FeedForward ff = new FeedForward();
-		FeedForwardLayer inputLayer = new FeedForwardLayer(1);
-		FeedForwardLayer hiddenLayer = new FeedForwardLayer(1, new ActivationLinear());
-		FeedForwardLayer outputLayer = new FeedForwardLayer(1);
+		FeedForwardLayer inputLayer = new FeedForwardLayer(2);
+		FeedForwardLayer hiddenLayer = new FeedForwardLayer(2, new ActivationThreshold(0.8));
+		hiddenLayer.setMatrix(new Matrix(matrix_1));
+		FeedForwardLayer outputLayer = new FeedForwardLayer(2);
+		outputLayer.setMatrix(new Matrix(matrix_2));
 		ff.addLayer(inputLayer);
 		ff.addLayer(hiddenLayer);
 		ff.addLayer(outputLayer);
+		ff.randomize();
 		
 		while(!t.isColliding()){
-			
+			double[] sensors = t.returnFrontBackSensorStatus();
+			actuate(sensors);
 		}
 		
 		
-		System.out.println("no more neural networks to test");
+		System.out.println("done");
 
 	}
 
@@ -96,17 +111,21 @@ public class StupidDriver extends Thread{
 		//		System.out.println(calculate[0] + " " + average);
 
 		if(calculate[0] > average){
+			System.out.println("accelerate");
 			accelerate();
 		}
+//		if(calculate[1] > average){
+//			System.out.println("release_accel");
+//			release_acceleration();
+//		}
 		if(calculate[1] > average){
-			release_acceleration();
-		}
-		if(calculate[2] > average){
+			System.out.println("reverse");
 			reverse();
 		}
-		if(calculate[3] > average){
-			release_reverse();
-		}
+//		if(calculate[3] > average){
+//			System.out.println("release_reverse");
+//			release_reverse();
+//		}
 
 		//		if(calculate[4] > average)
 		//			brake();

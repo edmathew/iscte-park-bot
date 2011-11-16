@@ -44,7 +44,7 @@ import framework.TestbedPanel;
  */
 public class TestbedMain {
 	private static final Logger log = LoggerFactory.getLogger(TestbedMain.class);
-	public static Driver myDriver = null;
+	public static StupidDriver myDriver = null;
 
 	public static void main(String[] args) {
 		try {
@@ -61,8 +61,11 @@ public class TestbedMain {
 		testbed.setVisible(true);
 		testbed.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		Driver stig = new Driver(model.getTest(), 50, 250);
-		myDriver = stig;
-		stig.start();
+//		Driver stig = new Driver(model.getTest(), 50, 250);
+//		myDriver = stig;
+//		stig.start();
+		StupidDriver prost = new StupidDriver(model.getTest(), 50,250);
+		myDriver = prost;
+		prost.start();
 	}
 }
