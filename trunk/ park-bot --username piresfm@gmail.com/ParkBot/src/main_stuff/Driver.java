@@ -9,6 +9,8 @@ import javax.swing.Timer;
 
 import org.jbox2d.common.MathUtils;
 
+import util.InputUniformization;
+
 import brain.Brain;
 import brain.FeedForward;
 
@@ -74,6 +76,7 @@ public class Driver extends Thread{
 		int numberOfSensors = t.returnSensorStatus().length;
 		b.createStarterNetworks(numberOfSensors, 9);
 		int c = 0;
+		InputUniformization iu = new InputUniformization(0, 3.1);
 		for(FeedForward ff: b.getNeuralNetworks()){
 			System.out.println("trying network #"+(++c) + "...");
 			try {
@@ -83,8 +86,8 @@ public class Driver extends Thread{
 			}
 			System.out.println("GO!");
 			timerRanOut = false;
-			Timer timer = new Timer(5000, new ActionListener() {
-				
+			Timer timer = new Timer(20000, new ActionListener() {
+
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					timerRanOut = true;
@@ -92,7 +95,12 @@ public class Driver extends Thread{
 			});
 			timer.start();
 			while (!t.isColliding() && timerRanOut == false){
-				actuate(ff.calculate(t.returnSensorStatus()));
+				double[] temp = iu.getUniformValue(t.returnSensorStatus());
+				for (double d: temp){
+					if (d!=0)
+						System.out.println(d);
+				}
+				actuate(ff.calculate(temp));
 			}
 			timer.stop();
 			t.reset();
@@ -104,25 +112,37 @@ public class Driver extends Thread{
 	}
 
 	private void actuate(double[] calculate) {
-		double average = calculateAverage(calculate); 
-		if(calculate[0] > average)
+		double average = calculateAverage(calculate);
+		//		System.out.println(calculate[0] + " " + average);
+
+		if(calculate[0] > average){
 			accelerate();
-		if(calculate[1] > average)
+		}
+		if(calculate[1] > average){
 			release_acceleration();
-		if(calculate[2] > average)
+		}
+		if(calculate[2] > average){
 			reverse();
-		if(calculate[3] > average)
+		}
+		if(calculate[3] > average){
 			release_reverse();
-		if(calculate[4] > average)
-			brake();
-		if(calculate[5] > average)
-			release_brake();						
-		if(calculate[6] > average)
+		}
+
+		//		if(calculate[4] > average)
+		//			brake();
+
+		if(calculate[5] > average){
+			release_brake();		
+		}
+		if(calculate[6] > average){
 			turn_left();
-		if(calculate[7] > average)
+		}
+		if(calculate[7] > average){
 			turn_right();
-		if(calculate[8] > average)
-			reset_steering();
+		}
+
+		//		if(calculate[8] > average)
+		//			reset_steering();
 	}
 
 	private double calculateAverage(double[] calculate) {
