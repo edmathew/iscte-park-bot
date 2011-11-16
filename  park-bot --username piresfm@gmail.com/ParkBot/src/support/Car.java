@@ -138,7 +138,7 @@ public class Car {
 		for(Body w : frontWheels)
 			w.applyForce(direction_list.pop(), w.getPosition());
 	}
-	
+
 	public void steer(float steeringAngle, float steerSpeed) {
 		float mspeed;
 		for(RevoluteJoint rj : frontWheelJoints){
@@ -151,7 +151,7 @@ public class Car {
 		for (Body w: getWheels())
 			killBodyOrthogonalVelocity(w);
 	}
-	
+
 	private void killBodyOrthogonalVelocity(Body b){
 		Vec2 localPoint = new Vec2(0,0);
 		Vec2 velocity = b.getLinearVelocityFromLocalPoint(localPoint);
@@ -201,25 +201,25 @@ public class Car {
 		tbd.type = BodyType.DYNAMIC;
 		Tagger t = new Tagger(tagName, create(tbd), position);
 		taggers.add(t);
-		
+
 		CircleShape ts = new CircleShape();
 		ts.m_radius = 0.2f;
 		t.getTaggerBody().createFixture(ts,1);
-		
+
 		PrismaticJointDef tjd = new PrismaticJointDef();
 		tjd.initialize(chassis, t.getTaggerBody(), t.getTaggerBody().getWorldCenter(), new Vec2(1, 0));
 		tjd.enableLimit = true;
 		tjd.lowerTranslation = tjd.upperTranslation = 0;
 		create(tjd);
 	}
-	
+
 	public LinkedList<Tagger> getTaggers() {
 		return taggers;
 	}
 
 	public double[] SensorStatusInDouble() {
 		double[] temp = new double[parkingSensors.size()];
-		
+
 		for (int i = 0; i < parkingSensors.size(); i++){
 			temp[i] = parkingSensors.get(i).getSensorDistanceToObject();
 		}
@@ -229,5 +229,15 @@ public class Car {
 	public void reset() {
 		taggers = new LinkedList<Tagger>();
 	}
-	
+
+	public double[] frontBackSensorStatusInDouble() {
+		double[] temp = new double[parkingSensors.size()];
+
+		for (int i = 0; i < parkingSensors.size(); i++){
+			if (parkingSensors.get(i).getSensorName().equals("BackStraight") || parkingSensors.get(i).getSensorName().equals("FrontStraight"))
+				temp[i] = parkingSensors.get(i).getSensorDistanceToObject();
+		}
+		return temp;
+	}
+
 }
