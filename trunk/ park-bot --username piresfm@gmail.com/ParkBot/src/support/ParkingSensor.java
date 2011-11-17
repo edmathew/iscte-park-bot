@@ -1,7 +1,6 @@
 package support;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 
 import library.RayCastClosestCallback;
 import main_stuff.CarTest;
@@ -10,6 +9,7 @@ import org.jbox2d.common.Color3f;
 import org.jbox2d.common.Vec2;
 
 public class ParkingSensor {
+	private final double DEFAULT_DISTANCE;
 	private String sensorName;
 	private Vec2 v1 = new Vec2();
 	private Vec2 v2 = new Vec2();
@@ -17,20 +17,23 @@ public class ParkingSensor {
 	private Vec2 p2 = new Vec2();
 	private CarTest car;
 	private RayCastClosestCallback rccc;
-	double last_recorded_distance = 3.1;
+	private double last_recorded_distance;
+	
 
-	public ParkingSensor(CarTest car, String name, Vec2 v1, Vec2 v2) {
+	public ParkingSensor(CarTest car, String name, Vec2 v1, Vec2 v2, double defaultDistance) {
 		this.sensorName = name;
 		this.v1.set(v1);
 		this.v2.set(v2);
 		this.v2.add(v1);
 		this.car = car;
+		this.DEFAULT_DISTANCE = defaultDistance;
 	}
 
 	public void getSensorStatus() {
 		rccc = new RayCastClosestCallback();
 		rccc.init();
 		car.getWorld().raycast(rccc, p1, p2);
+		
 		if(rccc.m_hit){
 			car.getDebugDraw().drawPoint(rccc.m_point, 5, new Color3f(0.4f, 0.9f, 0.4f));
 			car.getDebugDraw().drawSegment(p1, rccc.m_point, new Color3f(0.9f, 0.9f, 0.9f));
@@ -41,7 +44,7 @@ public class ParkingSensor {
 			last_recorded_distance = bd.doubleValue();
 		}else{
 			car.getDebugDraw().drawSegment(p1, p2, new Color3f(0.9f, 0.9f, 0.9f));
-			last_recorded_distance = 3.1;
+			last_recorded_distance = DEFAULT_DISTANCE;
 		}
 	}
 	

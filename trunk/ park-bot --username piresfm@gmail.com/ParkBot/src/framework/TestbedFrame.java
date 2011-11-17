@@ -30,7 +30,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
 
 /**
  * The testbed frame. Contains all stuff. Make sure you call {@link #setVisible(boolean)} and
@@ -41,7 +40,6 @@ import javax.swing.JScrollPane;
 @SuppressWarnings("serial")
 public class TestbedFrame extends JFrame {
 
-  private TestbedSidePanel side;
   private TestbedModel model;
   private TestbedController controller;
 
@@ -52,10 +50,8 @@ public class TestbedFrame extends JFrame {
     model = argModel;
     model.setDebugDraw(argPanel.getDebugDraw());
     controller = new TestbedController(model, argPanel);
-    side = new TestbedSidePanel(model, controller);
     
     add((Component) argPanel, "Center");
-//    add(new JScrollPane(side), "East");
     pack();
 
     controller.playTest(0);

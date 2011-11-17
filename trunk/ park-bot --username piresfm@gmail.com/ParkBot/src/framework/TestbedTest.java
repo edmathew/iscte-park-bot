@@ -232,7 +232,7 @@ public abstract class TestbedTest implements ContactListener, ObjectListener, Ob
     setTitle(getTestName());
     initTest(argDeserialized);
     synchronized (TestbedMain.myDriver) {
-		TestbedMain.myDriver.notifyAll();
+		TestbedMain.myDriver.notify();
 	}
   }
 
