@@ -16,7 +16,6 @@ public class StupidDriver extends Driver{
 
 	@Override
 	protected void actuate(double[] calculate) {
-		System.out.println("front_sensor: " + calculate[0]+", rear_sensor: "+calculate[1]);
 		if(calculate[0] < 0.5){
 			System.out.println("accelerate");
 			accelerate();
