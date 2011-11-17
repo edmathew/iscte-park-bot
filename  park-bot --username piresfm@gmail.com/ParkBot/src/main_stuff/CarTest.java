@@ -3,13 +3,11 @@ import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 
 
-import org.jbox2d.collision.AABB;
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.FixtureDef;
-import org.jbox2d.dynamics.World;
 
 import support.Car;
 import support.ParkingSensor;
@@ -19,11 +17,14 @@ import framework.TestbedTest;
 
 
 public class CarTest extends TestbedTest{
+	
+	public static double DEFAULT_PARKING_SENSOR_DISTANCE = 3.1;
 
 	final static float MAX_STEER_ANGLE = (float) (Math.PI/3);
 	final static float STEER_SPEED = 1.5f;
 	final static int SIDEWAYS_FRICTION_FORCE = 10;
-	static int HORSPOWER = 51;
+	final static int HORSPOWER = 75;
+
 	final static Vec2 CAR_STARTING_POSITION = new Vec2(10,10);
 
 	final static Vec2 LEFT_REAR_WHEEL_POSITION = new Vec2(-1.5f, 1.9f);
@@ -43,16 +44,11 @@ public class CarTest extends TestbedTest{
 	static float steeringAngle = 0;
 
 	private Car car;
-	Body pspot;
-	LinkedList<Body> tags = new LinkedList<Body>();
+	private LinkedList<Body> tags = new LinkedList<Body>();
 
-	
+
 	public boolean isColliding(){
 		return super.getPointCount() > 0;
-	}
-	
-	public void setspeed(int hp) {
-		HORSPOWER = hp;
 	}
 
 	@Override
@@ -83,13 +79,13 @@ public class CarTest extends TestbedTest{
 
 		pSpot.setAsEdge(new Vec2(20,10), new Vec2(20, 0));
 		ground.createFixture(pSpot, 1);
-		
+
 		pSpot.setAsEdge(new Vec2(20, 10), new Vec2(30, 10));
 		ground.createFixture(pSpot,1);
-		
+
 		pSpot.setAsEdge(new Vec2(20, 20), new Vec2(30, 20));
 		ground.createFixture(pSpot,1);
-		
+
 		pSpot.setAsEdge(new Vec2(25, 10), new Vec2(25, 20));
 		ground.createFixture(pSpot,1);
 
@@ -103,16 +99,16 @@ public class CarTest extends TestbedTest{
 		car.addBackWheel(RIGHT_REAR_WHEEL_POSITION);
 
 		//parking sensors
-		car.addParkingSensor(new ParkingSensor(this, "FrontStraight", new Vec2(0, -2.5f),new Vec2(0, -5.7f)));
-		car.addParkingSensor(new ParkingSensor(this, "BackStraight", new Vec2(0, 2.5f),new Vec2(0, 5.7f)));
-		car.addParkingSensor(new ParkingSensor(this, "Back45Left", new Vec2(1.5f, 2.5f), new Vec2(3.5f, 5)));
-		car.addParkingSensor(new ParkingSensor(this, "Back45Right", new Vec2(-1.5f, 2.5f), new Vec2(-3.5f, 5)));
-		car.addParkingSensor(new ParkingSensor(this, "Front45Left", new Vec2(1.5f, -2.5f), new Vec2(3.5f, -5)));
-		car.addParkingSensor(new ParkingSensor(this, "Front45Right", new Vec2(-1.5f, -2.5f), new Vec2(-3.5f, -5)));
-		car.addParkingSensor(new ParkingSensor(this, "LeftSide1", new Vec2(1.7f, -1.9f), new Vec2(4.9f, -1.9f)));
-		car.addParkingSensor(new ParkingSensor(this, "LeftSide2", new Vec2(1.7f, 1.9f), new Vec2(4.9f, 1.9f)));
-		car.addParkingSensor(new ParkingSensor(this, "RightSide1", new Vec2(-1.7f, -1.9f), new Vec2(-4.9f, -1.9f)));
-		car.addParkingSensor(new ParkingSensor(this, "RightSide2", new Vec2(-1.7f, 1.9f), new Vec2(-4.9f, 1.9f)));
+		car.addParkingSensor(new ParkingSensor(this, "FrontStraight", new Vec2(0, -2.5f),new Vec2(0, -5.7f), DEFAULT_PARKING_SENSOR_DISTANCE));
+		car.addParkingSensor(new ParkingSensor(this, "BackStraight", new Vec2(0, 2.5f),new Vec2(0, 5.7f), DEFAULT_PARKING_SENSOR_DISTANCE));
+		car.addParkingSensor(new ParkingSensor(this, "Back45Left", new Vec2(1.5f, 2.5f), new Vec2(3.5f, 5), DEFAULT_PARKING_SENSOR_DISTANCE));
+		car.addParkingSensor(new ParkingSensor(this, "Back45Right", new Vec2(-1.5f, 2.5f), new Vec2(-3.5f, 5), DEFAULT_PARKING_SENSOR_DISTANCE));
+		car.addParkingSensor(new ParkingSensor(this, "Front45Left", new Vec2(1.5f, -2.5f), new Vec2(3.5f, -5), DEFAULT_PARKING_SENSOR_DISTANCE));
+		car.addParkingSensor(new ParkingSensor(this, "Front45Right", new Vec2(-1.5f, -2.5f), new Vec2(-3.5f, -5), DEFAULT_PARKING_SENSOR_DISTANCE));
+		car.addParkingSensor(new ParkingSensor(this, "LeftSide1", new Vec2(1.7f, -1.9f), new Vec2(4.9f, -1.9f), DEFAULT_PARKING_SENSOR_DISTANCE));
+		car.addParkingSensor(new ParkingSensor(this, "LeftSide2", new Vec2(1.7f, 1.9f), new Vec2(4.9f, 1.9f), DEFAULT_PARKING_SENSOR_DISTANCE));
+		car.addParkingSensor(new ParkingSensor(this, "RightSide1", new Vec2(-1.7f, -1.9f), new Vec2(-4.9f, -1.9f), DEFAULT_PARKING_SENSOR_DISTANCE));
+		car.addParkingSensor(new ParkingSensor(this, "RightSide2", new Vec2(-1.7f, 1.9f), new Vec2(-4.9f, 1.9f), DEFAULT_PARKING_SENSOR_DISTANCE));
 
 		//parking-spot tag detectors
 		car.addTagger("1001", TOP_LEFT_TAG);
@@ -142,7 +138,6 @@ public class CarTest extends TestbedTest{
 			tfd.shape = ts;
 			tb.createFixture(tfd);
 			tags.add(tb);
-
 		}
 	}
 
@@ -151,10 +146,10 @@ public class CarTest extends TestbedTest{
 		super.step(settings);
 
 		//distance to parking spot center
-				addTextLine("Distance to center of parking spot: " + car.distanceTo(tags) + " nTaggerss: " + car.getTaggers().size() + "nTags: " + tags.size());
+		addTextLine("Distance to center of parking spot: " + car.distanceTo(tags) + " nTaggerss: " + car.getTaggers().size() + "nTags: " + tags.size());
 
 		car.updateSensorPositions(car);
-		car.getSensorStatus();
+		car.outputSensorStatus();
 		addTextLine("Colliding? " + super.getPointCount());
 
 	}
@@ -193,7 +188,7 @@ public class CarTest extends TestbedTest{
 			steeringAngle = -MAX_STEER_ANGLE;
 			break;
 		case KeyEvent.VK_O:
-			car.superBrake();
+			car.applyHandBrake();
 			break;
 
 		}
@@ -203,18 +198,16 @@ public class CarTest extends TestbedTest{
 	public String getTestName() {
 		return "ParkBot";
 	}
-	
-	public double[] returnSensorStatus(){
-		return car.SensorStatusInDouble();
+
+	public Car getCar() {
+		return car;
 	}
 
-	public void carReset() {
+	@Override
+	public void reset(){
+		super.reset();
 		engineSpeed = 0;
 		steeringAngle = 0;
 		tags = new LinkedList<Body>();
-	}
-
-	public double[] returnFrontBackSensorStatus() {
-		return car.frontBackSensorStatusInDouble();
 	}
 }

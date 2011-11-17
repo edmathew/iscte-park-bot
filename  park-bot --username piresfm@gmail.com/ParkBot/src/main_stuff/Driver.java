@@ -1,119 +1,56 @@
 package main_stuff;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.Random;
-
-import javax.swing.Timer;
-
-import org.jbox2d.common.MathUtils;
-
-import util.InputUniformization;
-
-import brain.Brain;
-import brain.FeedForward;
 
 import framework.TestbedTest;
 import main_stuff.CarTest;
 
-public class Driver extends Thread{
+public abstract class Driver implements Runnable{
 
-	private CarTest t;
-	private int sleep;
-	boolean timerRanOut = false;
+	protected CarTest t;
 
-	public Driver(TestbedTest t, int hp, int sleep) {
+	public Driver(TestbedTest t) {
 		this.t = (CarTest) t;
-		this.t.setspeed(hp);
-		this.sleep = sleep;
 	}
 
-	public void accelerate(){
+	protected void accelerate(){
 		t.keyPressed('u', KeyEvent.VK_UP);
 	}
 
-	public void release_acceleration(){
+	protected void release_acceleration(){
 		t.keyReleased('u', KeyEvent.VK_UP);
 	}
 
-	public void reverse(){
+	protected void reverse(){
 		t.keyPressed('d', KeyEvent.VK_DOWN);
 	}
 
-	public void release_reverse(){
+	protected void release_reverse(){
 		t.keyReleased('d', KeyEvent.VK_DOWN);
 	}
 
-	public void brake(){
+	protected void brake(){
 		t.keyPressed('o', KeyEvent.VK_O);
 	}
 
-	public void release_brake(){
+	protected void release_brake(){
 		t.keyReleased('o', KeyEvent.VK_O);
 	}
 
-	public void turn_left(){
+	protected void turn_left(){
 		t.keyPressed('l', KeyEvent.VK_LEFT);
 	}
 
-	public void turn_right(){
+	protected void turn_right(){
 		t.keyPressed('r', KeyEvent.VK_RIGHT);
 	}
 
-	public void reset_steering(){
+	protected void reset_steering(){
 		t.keyReleased('r', KeyEvent.VK_RIGHT);
 	}
-	@Override
-	public synchronized void start() {
-		try {
-			this.wait();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-		super.start();
-		Brain b = new Brain();
-		int numberOfSensors = t.returnSensorStatus().length;
-		b.createStarterNetworks(numberOfSensors, 9);
-		int c = 0;
-		InputUniformization iu = new InputUniformization(0, 3.1);
-		for(FeedForward ff: b.getNeuralNetworks()){
-			System.out.println("trying network #"+(++c) + "...");
-			try {
-				wait(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			System.out.println("GO!");
-			timerRanOut = false;
-			Timer timer = new Timer(20000, new ActionListener() {
 
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					timerRanOut = true;
-				}
-			});
-			timer.start();
-			while (!t.isColliding() && timerRanOut == false){
-				double[] temp = iu.getUniformValue(t.returnSensorStatus());
-				for (double d: temp){
-					if (d!=0)
-						System.out.println(d);
-				}
-				actuate(ff.calculate(temp));
-			}
-			timer.stop();
-			t.reset();
-			CarTest ct = (CarTest)t;
-			ct.carReset();
-		}
-		System.out.println("no more neural networks to test");
-
-	}
-
-	private void actuate(double[] calculate) {
+	protected void actuate(double[] calculate) {
 		double average = calculateAverage(calculate);
-		//		System.out.println(calculate[0] + " " + average);
 
 		if(calculate[0] > average){
 			accelerate();
@@ -128,8 +65,9 @@ public class Driver extends Thread{
 			release_reverse();
 		}
 
-		//		if(calculate[4] > average)
-		//			brake();
+		if(calculate[4] > average){
+			brake();
+		}
 
 		if(calculate[5] > average){
 			release_brake();		
@@ -141,15 +79,23 @@ public class Driver extends Thread{
 			turn_right();
 		}
 
-		//		if(calculate[8] > average)
-		//			reset_steering();
+		if(calculate[8] > average){
+			reset_steering();
+		}
 	}
 
-	private double calculateAverage(double[] calculate) {
+	protected double calculateAverage(double[] calculate) {
 		double temp = 0.0;
 		for (int i = 0; i < calculate.length; i++)
 			temp += calculate[i];
 		return temp/calculate.length;
 	}	
 
+	public synchronized void run(){
+		try {
+			this.wait();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }

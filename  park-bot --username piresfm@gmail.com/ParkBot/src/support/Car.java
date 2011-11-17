@@ -1,6 +1,5 @@
 package support;
 
-import java.math.BigDecimal;
 import java.util.LinkedList;
 
 import org.jbox2d.collision.shapes.CircleShape;
@@ -9,9 +8,7 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.Body;
 import org.jbox2d.dynamics.BodyDef;
 import org.jbox2d.dynamics.BodyType;
-import org.jbox2d.dynamics.Fixture;
 import org.jbox2d.dynamics.World;
-import org.jbox2d.dynamics.contacts.ContactEdge;
 import org.jbox2d.dynamics.joints.Joint;
 import org.jbox2d.dynamics.joints.JointDef;
 import org.jbox2d.dynamics.joints.PrismaticJointDef;
@@ -174,7 +171,7 @@ public class Car {
 		return fitness;
 	}
 
-	public void superBrake() {
+	public void applyHandBrake() {
 		chassis.setLinearVelocity(new Vec2(0, 0));
 		windshield.setLinearVelocity(new Vec2());
 		for (Body w: getWheels())
@@ -185,7 +182,7 @@ public class Car {
 		parkingSensors.add(parkingSensor);
 	}
 
-	public void getSensorStatus() {
+	public void outputSensorStatus() {
 		for(ParkingSensor p: parkingSensors)
 			p.getSensorStatus();
 	}
@@ -217,25 +214,25 @@ public class Car {
 		return taggers;
 	}
 
-	public double[] SensorStatusInDouble() {
-		double[] temp = new double[parkingSensors.size()];
-
-		for (int i = 0; i < parkingSensors.size(); i++){
-			temp[i] = parkingSensors.get(i).getSensorDistanceToObject();
-		}
-		return temp;
-	}
-
-	public void reset() {
-		taggers = new LinkedList<Tagger>();
-	}
-
-	public double[] frontBackSensorStatusInDouble() {
+	public double[] getFrontAndBackSensorStatusInDouble() {
 		double[] temp = new double[parkingSensors.size()];
 
 		for (int i = 0; i < parkingSensors.size(); i++){
 			if (parkingSensors.get(i).getSensorName().equals("BackStraight") || parkingSensors.get(i).getSensorName().equals("FrontStraight"))
 				temp[i] = parkingSensors.get(i).getSensorDistanceToObject();
+		}
+		return temp;
+	}
+
+	public int getNumberOfSensors() {
+		return parkingSensors.size();
+	}
+
+	public double[] getSensorStatusInDouble() {
+		double[] temp = new double[parkingSensors.size()];
+
+		for (int i = 0; i < parkingSensors.size(); i++){
+			temp[i] = parkingSensors.get(i).getSensorDistanceToObject();
 		}
 		return temp;
 	}
