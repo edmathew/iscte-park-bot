@@ -34,6 +34,7 @@ public class ActivationSigmoid implements ActivationFunction {
 	 * @return The output from the function.
 	 */
 	public double activationFunction(final double d) {
+
 		return 1.0 / (1 + BoundNumbers.exp(-1.0 * d));
 	}
 	

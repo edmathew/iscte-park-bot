@@ -61,8 +61,8 @@ public class TestbedMain {
 		testbed.setVisible(true);
 		testbed.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-//		Driver driver = new GoodDriver(model.getTest());
-		Driver driver = new StupidDriver(model.getTest());
+		Driver driver = new GoodDriver(model.getTest());
+//		Driver driver = new StupidDriver(model.getTest());
 		myDriver = driver;
 		Thread t = new Thread(driver);
 		t.start();
