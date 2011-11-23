@@ -1,16 +1,16 @@
 package activation;
 
-public class ActivationThreshold implements ActivationFunction{
+public class ActivationStep implements ActivationFunction{
 	double thresholdValue;
 	
-	public ActivationThreshold(double d) {
+	public ActivationStep(double d) {
 		this.thresholdValue = d;
 	}
 
 	@Override
 	public double activationFunction(double d) {
 		if (d > thresholdValue)
-			return d;
+			return 1;
 		return 0;
 	}
 

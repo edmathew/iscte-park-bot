@@ -8,6 +8,7 @@ import main_stuff.CarTest;
 public abstract class Driver implements Runnable{
 
 	protected CarTest t;
+	protected boolean timerRanOut = false;
 
 	public Driver(TestbedTest t) {
 		this.t = (CarTest) t;
@@ -98,4 +99,10 @@ public abstract class Driver implements Runnable{
 			e.printStackTrace();
 		}
 	}
+
+	public void discard() {
+		timerRanOut = true;
+	}
+
+	
 }

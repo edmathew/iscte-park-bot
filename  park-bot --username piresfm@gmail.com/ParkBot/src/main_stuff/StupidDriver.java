@@ -17,12 +17,12 @@ public class StupidDriver extends Driver{
 	@Override
 	protected void actuate(double[] calculate) {
 		if(calculate[0] < 0.5){
-			System.out.println("accelerate");
 			accelerate();
+			System.out.println("");
 		}
 		if(calculate[1] < 0.5){
-			System.out.println("reverse");
 			reverse();
+			System.out.println("");
 		}
 	}
 

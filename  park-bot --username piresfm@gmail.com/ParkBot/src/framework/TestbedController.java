@@ -29,6 +29,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
+import main_stuff.TestbedMain;
+
 import org.jbox2d.common.Vec2;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,7 +104,7 @@ public class TestbedController implements Runnable {
         model.getCodedKeys()[code] = true;
 
         if (key == ' ' && model.getCurrTest() != null) {
-          model.getCurrTest().lanchBomb();
+          TestbedMain.myDriver.discard();
         } else if (key == '[') {
           lastTest();
         } else if (key == ']') {
