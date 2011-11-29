@@ -2,9 +2,10 @@ package brain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
-public class FeedForward {
+public class FeedForward implements Cloneable{
 	private FeedForwardLayer firstLayer = null;
 	private FeedForwardLayer lastLayer = null;
 	private List<FeedForwardLayer> allLayers = new ArrayList<FeedForwardLayer>();
@@ -36,11 +37,11 @@ public class FeedForward {
 				ffl.calculate(input);
 			else if(ffl.isHidden() || ffl.isOutput())
 				ffl.calculate(null);
-//			else if(ffl.isOutput() && allLayers.size() == 2)
-//				ffl.calculate(null);
-//			System.out.println("this layer has charge: " + printDoubleArray(ffl.getCharge()));
-//			if (ffl.getMatrix() != null)
-//				ffl.printMatrix(ffl.getMatrix());
+			//			else if(ffl.isOutput() && allLayers.size() == 2)
+			//				ffl.calculate(null);
+			//			System.out.println("this layer has charge: " + printDoubleArray(ffl.getCharge()));
+			//			if (ffl.getMatrix() != null)
+			//				ffl.printMatrix(ffl.getMatrix());
 		}
 		return lastLayer.getCharge();
 	}
@@ -65,5 +66,42 @@ public class FeedForward {
 	public void randomize() {
 		for (FeedForwardLayer ffl : allLayers)
 			ffl.randomize();
+	}
+
+	public FeedForward evolve(double probOfMutation, double mutationRate){
+		FeedForward temp;
+			try {
+				temp = (FeedForward) this.clone();
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+				return null;
+			}
+
+			for (FeedForwardLayer ffl: temp.allLayers){
+				ffl.mutate(probOfMutation, mutationRate);
+			}
+
+			return temp;
+	}
+	
+	public void setFirstLayer(FeedForwardLayer firstLayer) {
+		this.firstLayer = firstLayer;
+	}
+	
+	public void setLastLayer(FeedForwardLayer lastLayer) {
+		this.lastLayer = lastLayer;
+	}
+	
+	public void setAllLayers(List<FeedForwardLayer> allLayers) {
+		this.allLayers = allLayers;
+	}
+	
+	@Override
+	protected Object clone() throws CloneNotSupportedException {
+		FeedForward ff = new FeedForward();
+		ff.setFirstLayer(firstLayer);
+		ff.setLastLayer(lastLayer);
+		ff.setAllLayers(allLayers);
+		return ff;
 	}
 }

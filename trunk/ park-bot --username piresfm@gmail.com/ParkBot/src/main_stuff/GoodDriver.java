@@ -23,12 +23,12 @@ public class GoodDriver extends Driver{
 	@Override
 	protected void actuate(double[] calculate) {
 		calculate = uniformize(calculate);
-//		System.out.println("I'm going to do the following actions:");
-//		int c = 0;
-//		for (double d: calculate){
-//			System.out.println(c++ + ": " + d);
-//		}
-//		System.out.println("#####");
+		//		System.out.println("I'm going to do the following actions:");
+		//		int c = 0;
+		//		for (double d: calculate){
+		//			System.out.println(c++ + ": " + d);
+		//		}
+		//		System.out.println("#####");
 		if(calculate[0] == 1){
 			accelerate();
 		}
@@ -95,38 +95,43 @@ public class GoodDriver extends Driver{
 		int numberOfSensors = t.getCar().getNumberOfSensors();
 		b.createStarterNetworks(numberOfSensors, 9);
 
-		int c = 0;
+		int iteration = 1;
+		while(true){
+			int c = 0;
+			for(FeedForward ff: b.getNeuralNetworks()){
+				System.out.println("Iteration: " + iteration + " network: "+(++c) + "...");
+				try { wait(1000); } catch (InterruptedException e) { e.printStackTrace(); }
+				System.out.println("GO!");
+				timerRanOut = false;
 
-		for(FeedForward ff: b.getNeuralNetworks()){
+				Timer timer = new Timer(20000, new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						timerRanOut = true;
+					}
+				});
 
-			System.out.println("trying network #"+(++c) + "...");
-			try { wait(1000); } catch (InterruptedException e) { e.printStackTrace(); }
-			System.out.println("GO!");
-			timerRanOut = false;
 
-			Timer timer = new Timer(20000, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					timerRanOut = true;
+				timer.start();
+
+				double[] output = {0,0,0,0,0,0,0,0,0};
+
+				while (!t.isColliding() && timerRanOut == false){
+					double[] temp = iu.getUniformValue(t.getCar().getSensorStatusInDouble());
+					double[] input = concatentate(temp, output); 
+					output = ff.calculate(input);
+					actuate(output);
+
 				}
-			});
 
+				b.record(ff, t.getScore());
 
-			timer.start();
-
-			double[] output = {0,0,0,0,0,0,0,0,0};
-
-			while (!t.isColliding() && timerRanOut == false){
-				double[] temp = iu.getUniformValue(t.getCar().getSensorStatusInDouble());
-				double[] input = concatentate(temp, output); 
-				output = ff.calculate(input);
-				actuate(output);
+				timer.stop();
+				t.reset();
 			}
-
-			timer.stop();
-			t.reset();
+			b.learn();
+			iteration++;
 		}
-		System.out.println("no more neural networks to test");
 	}
 
 	private double[] concatentate(double[] input, double[] output) {
