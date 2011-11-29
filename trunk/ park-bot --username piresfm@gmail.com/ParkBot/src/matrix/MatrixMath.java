@@ -133,7 +133,7 @@ public class MatrixMath {
 
 		if (aArray.length != bArray.length) {
 			throw new MatrixError(
-					"To take the dot product, both matrices must be of the same length.");
+					"To take the dot product, both matrices must be of the same length("+ aArray.length + "vs"+ bArray.length+".");
 		}
 
 		double result = 0;

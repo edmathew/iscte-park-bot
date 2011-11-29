@@ -1,15 +1,19 @@
 package brain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 
-public class FeedForward implements Cloneable{
+public class FeedForward implements Cloneable, Serializable{
+	private static final long serialVersionUID = 1L;
+	
+	private String descriptor;
 	private FeedForwardLayer firstLayer = null;
 	private FeedForwardLayer lastLayer = null;
 	private List<FeedForwardLayer> allLayers = new ArrayList<FeedForwardLayer>();
-	private float fitness = 0;
+	private double fitness = 0;
 
 	public FeedForward(){
 
@@ -29,6 +33,14 @@ public class FeedForward implements Cloneable{
 		allLayers.add(ffl);
 
 
+	}
+
+	public String getDescriptor() {
+		return descriptor;
+	}
+
+	public void setDescriptor(String descriptor) {
+		this.descriptor = descriptor;
 	}
 
 	public double[] calculate(double[] input){
@@ -55,11 +67,11 @@ public class FeedForward implements Cloneable{
 		return s;
 	}
 
-	public float getFitness() {
+	public double getFitness() {
 		return fitness;
 	}
 
-	public void setFitness(float fitness) {
+	public void setFitness(double fitness) {
 		this.fitness = fitness;
 	}
 
@@ -68,40 +80,35 @@ public class FeedForward implements Cloneable{
 			ffl.randomize();
 	}
 
-	public FeedForward evolve(double probOfMutation, double mutationRate){
-		FeedForward temp;
-			try {
-				temp = (FeedForward) this.clone();
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-				return null;
-			}
+	public void evolve(double probOfMutation, double mutationRate){
 
-			for (FeedForwardLayer ffl: temp.allLayers){
-				ffl.mutate(probOfMutation, mutationRate);
-			}
+		for (FeedForwardLayer ffl: allLayers){
+			ffl.mutate(probOfMutation, mutationRate);
+		}
 
-			return temp;
 	}
-	
+
 	public void setFirstLayer(FeedForwardLayer firstLayer) {
 		this.firstLayer = firstLayer;
 	}
-	
+
 	public void setLastLayer(FeedForwardLayer lastLayer) {
 		this.lastLayer = lastLayer;
 	}
-	
+
 	public void setAllLayers(List<FeedForwardLayer> allLayers) {
 		this.allLayers = allLayers;
 	}
-	
+
 	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		FeedForward ff = new FeedForward();
+		ff.setDescriptor(descriptor);
 		ff.setFirstLayer(firstLayer);
 		ff.setLastLayer(lastLayer);
 		ff.setAllLayers(allLayers);
 		return ff;
 	}
+	
+	
 }
