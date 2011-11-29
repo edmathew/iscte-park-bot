@@ -1,20 +1,14 @@
 package brain;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import support.ScoreItem;
 
-import activation.ActivationSigmoid;
-import activation.ActivationStep;
-import activation.ActivationThreshold;
 
 public class Brain {
 	private static final int NUMBER_OF_STARTER_NETWORKS = 10;
-	private static final int NUMBER_OF_CREATIONAL_NETWORKS = 5;
+	private static final int NUMBER_OF_CREATIONAL_NETWORKS = 2;
 	private List<FeedForward> neuralNetworks = new ArrayList<FeedForward>();
-	private ArrayList<ScoreItem> iterationNetworks = new ArrayList<ScoreItem>();
 
 
 	public void createStarterNetworks(int inputLength, int numberOfOutputs){
@@ -28,6 +22,7 @@ public class Brain {
 			ff.addLayer(hiddenLayer);
 			ff.addLayer(outputLayer);
 			ff.randomize();
+			ff.setDescriptor("S#"+(i+1));
 			neuralNetworks.add(ff);
 		}
 	}
@@ -36,66 +31,85 @@ public class Brain {
 		return neuralNetworks;
 	}
 
-	public void record(FeedForward ff, double score) {
-		iterationNetworks.add(new ScoreItem(ff, score));
-	}
-
-	public void learn() {
+	public void learn(int iteration) {
 		System.out.println("Sorting the networks...");
 		//ordenar as redes por score
-		while (!isOrdered(iterationNetworks)){
-			order(iterationNetworks);
+		while (!isOrdered(neuralNetworks)){
+			order(neuralNetworks);
 		}
-		for (ScoreItem si : iterationNetworks){
-			System.out.println(">: " + si.getScore());
+		for (FeedForward ff : neuralNetworks){
+			System.out.println(ff.getDescriptor() + ">: " + ff.getFitness());
 		}
+		System.out.println("Group fitness: " + groupFitness(neuralNetworks));
+		System.out.println("#######");
 
 		//seleccionar redes de topo
-		List<FeedForward> creationalNetworks = selectNetworks(iterationNetworks, NUMBER_OF_CREATIONAL_NETWORKS);
+		ArrayList<FeedForward> creationalNetworks = selectNetworks(neuralNetworks, NUMBER_OF_CREATIONAL_NETWORKS);
 
-		//criar novas redes com base nas anteriores
-		neuralNetworks = new ArrayList<FeedForward>();
+		//preencher as primeiras posições com os top performers
+		neuralNetworks = creationalNetworks;
 		int c = 0;
+		
+		//criar novas redes com base nas top anteriores
 		while (neuralNetworks.size() < NUMBER_OF_STARTER_NETWORKS){
-			neuralNetworks.add(creationalNetworks.get(c).evolve(0.2, 0.1));
-			c++;
-			if (c == NUMBER_OF_CREATIONAL_NETWORKS)
-				c = 0;
+			try {
+				FeedForward evolvedNetwork = (FeedForward) creationalNetworks.get(c).clone();
+				evolvedNetwork.setDescriptor(evolvedNetwork.getDescriptor()+"#E" + iteration);
+				evolvedNetwork.evolve(0.2, 0.1);
+				neuralNetworks.add(evolvedNetwork);
+				c++;
+				if (c == NUMBER_OF_CREATIONAL_NETWORKS)
+					c = 0;
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
 		}
 		
-		iterationNetworks = new ArrayList<ScoreItem>();
+		
 	}
 
-	private List<FeedForward> selectNetworks(
-			ArrayList<ScoreItem> iterationNetworks,
+	private double groupFitness(List<FeedForward> nnlist) {
+		double result = 0;
+		for (FeedForward ff : nnlist){
+			result += ff.getFitness();
+		}
+		return result;
+	}
+
+	private ArrayList<FeedForward> selectNetworks(
+			List<FeedForward> iterationNetworks,
 			int numberOfCreationalNetworks) {
 		ArrayList<FeedForward> selectedNetworks = new ArrayList<FeedForward>();
 		for (int i = 0; i < numberOfCreationalNetworks; i++)
-			selectedNetworks.add(iterationNetworks.get(i).getFf());
+			selectedNetworks.add(iterationNetworks.get(i));
 			
 		return selectedNetworks;
 	}
 
-	private boolean isOrdered(ArrayList<ScoreItem> list) {
+	private boolean isOrdered(List<FeedForward> list) {
 
-		for (int i = 1; i < list.size()-1; i++){
-			if (list.get(i).getScore() < list.get(i-1).getScore()){
+		for (int i = 1; i < list.size(); i++){
+			if (list.get(i).getFitness() < list.get(i-1).getFitness()){
 				return false;
 			}
 		}
 		return true;
 	}
 
-	private void order(ArrayList<ScoreItem> iterationNetworks) {
+	private void order(List<FeedForward> iterationNetworks) {
 		//I hate sorting algorithms! BubbleSort I choose you!
-		for (int i = 1; i < iterationNetworks.size()-1; i++){
-			if (iterationNetworks.get(i).getScore() < iterationNetworks.get(i-1).getScore()){
-				ScoreItem temp = iterationNetworks.get(i);
+		for (int i = 1; i < iterationNetworks.size(); i++){
+			if (iterationNetworks.get(i).getFitness() < iterationNetworks.get(i-1).getFitness()){
+				FeedForward temp = iterationNetworks.get(i);
 				iterationNetworks.set(i, iterationNetworks.get(i-1));
 				iterationNetworks.set(i-1, temp);
 			}
 
 		}
 
+	}
+	
+	private void writeToFile(){
+		
 	}
 }

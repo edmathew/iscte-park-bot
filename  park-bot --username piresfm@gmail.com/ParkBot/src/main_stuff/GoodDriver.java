@@ -97,11 +97,13 @@ public class GoodDriver extends Driver{
 
 		int iteration = 1;
 		while(true){
+			try { wait(1000); } catch (InterruptedException e) { e.printStackTrace(); }
 			int c = 0;
 			for(FeedForward ff: b.getNeuralNetworks()){
 				System.out.println("Iteration: " + iteration + " network: "+(++c) + "...");
+				System.out.println("Running " + ff.getDescriptor());
 				try { wait(1000); } catch (InterruptedException e) { e.printStackTrace(); }
-				System.out.println("GO!");
+//				System.out.println("GO!");
 				timerRanOut = false;
 
 				Timer timer = new Timer(20000, new ActionListener() {
@@ -123,13 +125,13 @@ public class GoodDriver extends Driver{
 					actuate(output);
 
 				}
-
-				b.record(ff, t.getScore());
+				ff.setFitness(t.getScore());
+				System.out.println(ff.getDescriptor() + ": " + t.getScore());
 
 				timer.stop();
 				t.reset();
 			}
-			b.learn();
+			b.learn(iteration);
 			iteration++;
 		}
 	}
