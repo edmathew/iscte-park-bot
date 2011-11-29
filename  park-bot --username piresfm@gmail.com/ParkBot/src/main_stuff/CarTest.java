@@ -17,7 +17,7 @@ import framework.TestbedTest;
 
 
 public class CarTest extends TestbedTest{
-	
+
 	public static double DEFAULT_PARKING_SENSOR_DISTANCE = 3.1;
 
 	final static float MAX_STEER_ANGLE = (float) (Math.PI/3);
@@ -45,6 +45,7 @@ public class CarTest extends TestbedTest{
 
 	private Car car;
 	private LinkedList<Body> tags = new LinkedList<Body>();
+	private double score = 9999;
 
 
 	public boolean isColliding(){
@@ -146,8 +147,10 @@ public class CarTest extends TestbedTest{
 		super.step(settings);
 
 		//distance to parking spot center
-		addTextLine("Distance to center of parking spot: " + car.distanceTo(tags) + " nTaggerss: " + car.getTaggers().size() + "nTags: " + tags.size());
+		score = car.distanceTo(tags);
 
+		//addTextLine("Distance to center of parking spot: " + score + " nTaggerss: " + car.getTaggers().size() + "nTags: " + tags.size());
+		addTextLine("Score: " + score);
 		car.updateSensorPositions(car);
 		car.outputSensorStatus();
 		addTextLine("Colliding? " + super.getPointCount());
@@ -209,5 +212,9 @@ public class CarTest extends TestbedTest{
 		engineSpeed = 0;
 		steeringAngle = 0;
 		tags = new LinkedList<Body>();
+	}
+	
+	public double getScore() {
+		return score;
 	}
 }
