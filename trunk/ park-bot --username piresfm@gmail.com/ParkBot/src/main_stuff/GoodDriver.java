@@ -97,24 +97,28 @@ public class GoodDriver extends Driver {
 
 	@Override
 	public synchronized void run() {
-		super.run();
-
+		
+		
+//		super.run();
+//		System.out.println("here i am");
 		Brain b;
 
 		if (brain == null) {
 			b = new Brain();
 			brain = b;
+			int numberOfSensors = t.getCar().getNumberOfSensors();
+			b.createStarterNetworks(numberOfSensors, 9);
 		} else
 			b = brain;
 
 		InputUniformization iu = new InputUniformization(0,
 				CarTest.DEFAULT_PARKING_SENSOR_DISTANCE);
 
-		int numberOfSensors = t.getCar().getNumberOfSensors();
-		b.createStarterNetworks(numberOfSensors, 9);
+		
 
 		int iteration = 1;
 		while (true) {
+			
 			try {
 				wait(1000);
 			} catch (InterruptedException e) {
