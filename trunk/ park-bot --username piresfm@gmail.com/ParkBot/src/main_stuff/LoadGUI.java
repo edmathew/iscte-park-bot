@@ -28,11 +28,11 @@ public class LoadGUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btLoad){
 					String filename = JOptionPane.showInputDialog("Introduza o ficheiro para carregar: ");
-					driver.loadBrain(filename);
+					((GoodDriver)driver).loadBrain(filename);
 				}
 				if (e.getSource() == btSave){
 					String filename = JOptionPane.showInputDialog("Introduza o ficheiro para guardar: ");
-					driver.saveBrain(filename);
+					((GoodDriver)driver).saveBrain(filename);
 				}
 			}
 		};
@@ -52,11 +52,8 @@ public class LoadGUI extends JFrame{
 		
 	}
 
-	public static void main(String[] args) {
-		new LoadGUI().start();
-	}
 
-	private void start() {
+	public void start() {
 		setVisible(true);
 	}
 

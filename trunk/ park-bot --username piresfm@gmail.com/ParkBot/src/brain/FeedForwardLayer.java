@@ -1,5 +1,6 @@
 package brain;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import activation.ActivationFunction;
@@ -7,7 +8,7 @@ import activation.ActivationSigmoid;
 import matrix.Matrix;
 import matrix.MatrixMath;
 
-public class FeedForwardLayer {
+public class FeedForwardLayer implements Serializable{
 	private int neuronNumber;
 	private Matrix matrix;
 	private double[] charge;
@@ -125,7 +126,7 @@ public class FeedForwardLayer {
 		}
 	}
 
-	public void mutate(double mutationProb, double mutationRate) {
+	public void mutate(double mutationProb) {
 		if (!isInput()){
 			Random r = new Random();
 			int rows = matrix.getRows();
@@ -134,7 +135,7 @@ public class FeedForwardLayer {
 			for (int i = 0; i < rows; i++){
 				for (int j = 0; j < cols; j++){
 					if (r.nextDouble() > mutationProb){
-						matrix.set(i, j, matrix.get(i, j)*mutationRate);
+						matrix.set(i, j, matrix.get(i, j)+(r.nextDouble()-0.6));
 					}
 				}
 			}
