@@ -62,10 +62,20 @@ public class TestbedMain {
 		testbed.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		Driver driver = new GoodDriver(model.getTest());
-		LoadGUI lgui = new LoadGUI(driver);
+		
 //		Driver driver = new StupidDriver(model.getTest());
 		myDriver = driver;
+		LoadGUI lgui = new LoadGUI(myDriver);
+		lgui.start();
 		Thread t = new Thread(driver);
 		t.start();
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+		}
+		
+		((GoodDriver)driver).saveBrain("Brain.dat");
+		
 	}
 }

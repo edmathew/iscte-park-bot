@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FeedForward implements Cloneable, Serializable{
+public class FeedForward implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private String descriptor;
@@ -78,10 +78,10 @@ public class FeedForward implements Cloneable, Serializable{
 			ffl.randomize();
 	}
 
-	public void evolve(double probOfMutation, double mutationRate){
+	public void evolve(double probOfMutation){
 
 		for (FeedForwardLayer ffl: allLayers){
-			ffl.mutate(probOfMutation, mutationRate);
+			ffl.mutate(probOfMutation);
 		}
 
 	}
@@ -98,15 +98,6 @@ public class FeedForward implements Cloneable, Serializable{
 		this.allLayers = allLayers;
 	}
 
-	@Override
-	protected Object clone() throws CloneNotSupportedException {
-		FeedForward ff = new FeedForward();
-		ff.setDescriptor(descriptor);
-		ff.setFirstLayer(firstLayer);
-		ff.setLastLayer(lastLayer);
-		ff.setAllLayers(allLayers);
-		return ff;
-	}
 
 	public FeedForward newInstance() {
 		FeedForward copy = new FeedForward();

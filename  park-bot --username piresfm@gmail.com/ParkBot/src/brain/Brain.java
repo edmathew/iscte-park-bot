@@ -1,11 +1,13 @@
 package brain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 
 
-public class Brain {
+@SuppressWarnings("serial")
+public class Brain implements Serializable{
 	private static final int NUMBER_OF_STARTER_NETWORKS = 40;
 	private static final int NUMBER_OF_CREATIONAL_NETWORKS = 10;
 	private List<FeedForward> neuralNetworks = new ArrayList<FeedForward>();
@@ -54,7 +56,7 @@ public class Brain {
 		while (neuralNetworks.size() < NUMBER_OF_STARTER_NETWORKS){
 				FeedForward evolvedNetwork = (FeedForward) creationalNetworks.get(c).newInstance();
 				evolvedNetwork.setDescriptor(evolvedNetwork.getDescriptor()+"#E" + iteration);
-				evolvedNetwork.evolve(0.2, 0.1);
+				evolvedNetwork.evolve(0.2);
 				neuralNetworks.add(evolvedNetwork);
 				c++;
 				if (c == NUMBER_OF_CREATIONAL_NETWORKS)
