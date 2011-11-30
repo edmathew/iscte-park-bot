@@ -143,4 +143,12 @@ public class FeedForwardLayer {
 
 	}
 
+	public FeedForwardLayer newInstance() {
+		FeedForwardLayer copy = new FeedForwardLayer(neuronNumber, activationFunction);
+		if (!isInput()){
+			copy.setMatrix(matrix.clone());
+		}
+		return copy;
+	}
+
 }

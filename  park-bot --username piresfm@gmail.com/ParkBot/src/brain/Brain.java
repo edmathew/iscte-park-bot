@@ -6,8 +6,8 @@ import java.util.List;
 
 
 public class Brain {
-	private static final int NUMBER_OF_STARTER_NETWORKS = 10;
-	private static final int NUMBER_OF_CREATIONAL_NETWORKS = 2;
+	private static final int NUMBER_OF_STARTER_NETWORKS = 40;
+	private static final int NUMBER_OF_CREATIONAL_NETWORKS = 10;
 	private List<FeedForward> neuralNetworks = new ArrayList<FeedForward>();
 
 
@@ -46,23 +46,19 @@ public class Brain {
 		//seleccionar redes de topo
 		ArrayList<FeedForward> creationalNetworks = selectNetworks(neuralNetworks, NUMBER_OF_CREATIONAL_NETWORKS);
 
-		//preencher as primeiras posições com os top performers
+		//preencher as primeiras posiÔøΩÔøΩes com os top performers
 		neuralNetworks = creationalNetworks;
 		int c = 0;
 		
 		//criar novas redes com base nas top anteriores
 		while (neuralNetworks.size() < NUMBER_OF_STARTER_NETWORKS){
-			try {
-				FeedForward evolvedNetwork = (FeedForward) creationalNetworks.get(c).clone();
+				FeedForward evolvedNetwork = (FeedForward) creationalNetworks.get(c).newInstance();
 				evolvedNetwork.setDescriptor(evolvedNetwork.getDescriptor()+"#E" + iteration);
 				evolvedNetwork.evolve(0.2, 0.1);
 				neuralNetworks.add(evolvedNetwork);
 				c++;
 				if (c == NUMBER_OF_CREATIONAL_NETWORKS)
 					c = 0;
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
 		}
 		
 		
@@ -109,7 +105,4 @@ public class Brain {
 
 	}
 	
-	private void writeToFile(){
-		
-	}
 }

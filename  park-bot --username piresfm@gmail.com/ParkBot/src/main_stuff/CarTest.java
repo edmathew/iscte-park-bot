@@ -25,7 +25,7 @@ public class CarTest extends TestbedTest{
 	final static int SIDEWAYS_FRICTION_FORCE = 10;
 	final static int HORSPOWER = 75;
 
-	final static Vec2 CAR_STARTING_POSITION = new Vec2(10,10);
+	final static Vec2 CAR_STARTING_POSITION = new Vec2(-25,25);
 
 	final static Vec2 LEFT_REAR_WHEEL_POSITION = new Vec2(-1.5f, 1.9f);
 	final static Vec2 RIGHT_REAR_WHEEL_POSITION = new Vec2(1.5f, 1.9f);

@@ -3,8 +3,6 @@ package brain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 
 public class FeedForward implements Cloneable, Serializable{
 	private static final long serialVersionUID = 1L;
@@ -108,6 +106,15 @@ public class FeedForward implements Cloneable, Serializable{
 		ff.setLastLayer(lastLayer);
 		ff.setAllLayers(allLayers);
 		return ff;
+	}
+
+	public FeedForward newInstance() {
+		FeedForward copy = new FeedForward();
+		for (FeedForwardLayer ffl: allLayers){
+			copy.addLayer(ffl.newInstance());
+		}
+		copy.setDescriptor(descriptor);
+		return copy;
 	}
 	
 	
