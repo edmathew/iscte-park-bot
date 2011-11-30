@@ -15,6 +15,8 @@ public class LoadGUI extends JFrame{
 	private JButton btLoad = new JButton("Carregar");
 	private JButton btSave = new JButton("Guardar");
 	
+	Driver driver;
+	
 	public LoadGUI(){
 		setSize(WIDTH, HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,11 +28,11 @@ public class LoadGUI extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				if (e.getSource() == btLoad){
 					String filename = JOptionPane.showInputDialog("Introduza o ficheiro para carregar: ");
-					GoodDriver.loadBrain(filename);
+					driver.loadBrain(filename);
 				}
 				if (e.getSource() == btSave){
 					String filename = JOptionPane.showInputDialog("Introduza o ficheiro para guardar: ");
-					GoodDriver.saveBrain(filename);
+					driver.saveBrain(filename);
 				}
 			}
 		};
@@ -44,6 +46,12 @@ public class LoadGUI extends JFrame{
 		getContentPane().add(btSave);
 	}
 	
+	public LoadGUI(Driver driver) {
+		this();
+		this.driver = driver;
+		
+	}
+
 	public static void main(String[] args) {
 		new LoadGUI().start();
 	}
