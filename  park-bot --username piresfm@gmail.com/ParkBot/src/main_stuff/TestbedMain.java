@@ -67,15 +67,9 @@ public class TestbedMain {
 		myDriver = driver;
 		LoadGUI lgui = new LoadGUI(myDriver);
 		lgui.start();
-		Thread t = new Thread(driver);
-		t.start();
+//		Thread t = new Thread(driver);
+//		t.start();
 		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-		}
-		
-		((GoodDriver)driver).saveBrain("Brain.dat");
 		
 	}
 }
