@@ -26,7 +26,7 @@ public class Brain implements Serializable{
 			ff.addLayer(hiddenLayer);
 			ff.addLayer(outputLayer);
 			ff.randomize();
-			ff.setDescriptor("S"+(i+1)+"#");
+			ff.setDescriptor("S"+(i+1));
 			neuralNetworks.add(ff);
 		}
 	}
