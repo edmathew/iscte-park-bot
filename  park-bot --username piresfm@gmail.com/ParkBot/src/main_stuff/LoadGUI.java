@@ -32,6 +32,7 @@ public class LoadGUI extends JFrame{
 					String filename = JOptionPane.showInputDialog("Introduza o ficheiro para carregar: ");
 					System.out.println("Loading brain");
 					((GoodDriver)driver).loadBrain(filename);
+					new Thread(driver).start();
 					
 				}
 				if (e.getSource() == btSave){

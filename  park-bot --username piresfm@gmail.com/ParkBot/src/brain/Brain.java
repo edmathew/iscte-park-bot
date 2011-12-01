@@ -8,8 +8,10 @@ import java.util.List;
 
 @SuppressWarnings("serial")
 public class Brain implements Serializable{
+	private int current_iteration = 1;
 	private static final int NUMBER_OF_STARTER_NETWORKS = 40;
 	private static final int NUMBER_OF_CREATIONAL_NETWORKS = 10;
+	private static final int NUMBER_OF_NEURONS_IN_HIDDEN_LAYER = 25;
 	private List<FeedForward> neuralNetworks = new ArrayList<FeedForward>();
 
 
@@ -17,14 +19,14 @@ public class Brain implements Serializable{
 		for (int i = 0; i < NUMBER_OF_STARTER_NETWORKS; i++){
 			FeedForward ff = new FeedForward();
 			FeedForwardLayer inputLayer = new FeedForwardLayer(inputLength + numberOfOutputs);
-			FeedForwardLayer hiddenLayer = new FeedForwardLayer((numberOfOutputs+inputLength)/2);
+			FeedForwardLayer hiddenLayer = new FeedForwardLayer(NUMBER_OF_NEURONS_IN_HIDDEN_LAYER);
 			FeedForwardLayer outputLayer = new FeedForwardLayer(numberOfOutputs);
 
 			ff.addLayer(inputLayer);
 			ff.addLayer(hiddenLayer);
 			ff.addLayer(outputLayer);
 			ff.randomize();
-			ff.setDescriptor("S#"+(i+1));
+			ff.setDescriptor("S"+(i+1)+"#");
 			neuralNetworks.add(ff);
 		}
 	}
@@ -33,17 +35,20 @@ public class Brain implements Serializable{
 		return neuralNetworks;
 	}
 
-	public void learn(int iteration) {
-		System.out.println("Sorting the networks...");
+	public void learn() {
+//		System.out.println("Sorting the networks...");
 		//ordenar as redes por score
 		while (!isOrdered(neuralNetworks)){
 			order(neuralNetworks);
 		}
-		for (FeedForward ff : neuralNetworks){
-			System.out.println(ff.getDescriptor() + ">: " + ff.getFitness());
-		}
-		System.out.println("Group fitness: " + groupFitness(neuralNetworks));
-		System.out.println("#######");
+//		for (FeedForward ff : neuralNetworks){
+//			System.out.println(ff.getDescriptor() + ">: " + ff.getFitness());
+//		}
+		
+		//Verbose time. I want: Iteration Average; Iteration Best (with identification).
+		System.out.println("Iteration " + current_iteration + " results:");
+		System.out.println("Average: " + groupFitness(neuralNetworks)/neuralNetworks.size());
+		System.out.println("Best: " + neuralNetworks.get(0).getFitness() + " ( " + neuralNetworks.get(0).getDescriptor() + " ).");
 
 		//seleccionar redes de topo
 		ArrayList<FeedForward> creationalNetworks = selectNetworks(neuralNetworks, NUMBER_OF_CREATIONAL_NETWORKS);
@@ -55,13 +60,15 @@ public class Brain implements Serializable{
 		//criar novas redes com base nas top anteriores
 		while (neuralNetworks.size() < NUMBER_OF_STARTER_NETWORKS){
 				FeedForward evolvedNetwork = (FeedForward) creationalNetworks.get(c).newInstance();
-				evolvedNetwork.setDescriptor(evolvedNetwork.getDescriptor()+"#E" + iteration);
+				evolvedNetwork.setDescriptor(evolvedNetwork.getDescriptor()+"#E" + current_iteration);
 				evolvedNetwork.evolve(0.2);
 				neuralNetworks.add(evolvedNetwork);
 				c++;
 				if (c == NUMBER_OF_CREATIONAL_NETWORKS)
 					c = 0;
 		}
+		
+		current_iteration++;
 		
 		
 	}
@@ -105,6 +112,14 @@ public class Brain implements Serializable{
 
 		}
 
+	}
+	
+	public int getCurrent_iteration() {
+		return current_iteration;
+	}
+	
+	public void setCurrent_iteration(int current_iteration) {
+		this.current_iteration = current_iteration;
 	}
 	
 }
