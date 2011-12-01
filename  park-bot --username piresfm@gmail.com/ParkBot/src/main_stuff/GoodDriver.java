@@ -98,7 +98,7 @@ public class GoodDriver extends Driver {
 	@Override
 	public synchronized void run() {
 		
-		
+		PerformanceGUI pgui = new PerformanceGUI();
 //		super.run();
 //		System.out.println("here i am");
 		Brain b;
@@ -117,7 +117,7 @@ public class GoodDriver extends Driver {
 		
 
 		while (true) {
-			
+			pgui.clear();
 			try {
 				wait(1000);
 			} catch (InterruptedException e) {
@@ -125,8 +125,7 @@ public class GoodDriver extends Driver {
 			}
 			int c = 0;
 			for (FeedForward ff : b.getNeuralNetworks()) {
-				System.out.println("Iteration: " + b.getCurrent_iteration() + " network: "
-						+ (++c) + "...");
+				LoadGUI.updateRunningLabel("Iteration: " + b.getCurrent_iteration() + " network: " + (++c) + "...");
 //				System.out.println("Running " + ff.getDescriptor());
 				try {
 					wait(1000);
@@ -156,7 +155,8 @@ public class GoodDriver extends Driver {
 
 				}
 				ff.setFitness(t.getScore());
-				System.out.println(ff.getDescriptor() + ": " + t.getScore());
+				pgui.addData(ff.getDescriptor() + ": " + t.getScore());
+//				System.out.println(ff.getDescriptor() + ": " + t.getScore());
 
 				timer.stop();
 				t.reset();

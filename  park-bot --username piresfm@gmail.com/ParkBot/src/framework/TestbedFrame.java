@@ -28,6 +28,8 @@ package framework;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
@@ -45,6 +47,8 @@ public class TestbedFrame extends JFrame {
 
   public TestbedFrame(final TestbedModel argModel, final TestbedPanel argPanel) {
     super("JBox2D Testbed");
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    setLocation((int)(screenSize.getWidth()/2) - 350, (int)screenSize.getHeight()/4);
     setLayout(new BorderLayout());
 
     model = argModel;

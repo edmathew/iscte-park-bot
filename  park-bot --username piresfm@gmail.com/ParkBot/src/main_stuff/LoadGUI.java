@@ -1,28 +1,40 @@
 package main_stuff;
 
-import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 public class LoadGUI extends JFrame{
 	
-	private final int WIDTH = 200;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4008918717515477552L;
+	private final int WIDTH = 400;
 	private final int HEIGHT = 100;
 	private JButton btLoad = new JButton("Carregar");
 	private JButton btSave = new JButton("Guardar");
-	private JButton btGenerate = new JButton("Novo CŽrebro");
+	private JButton btGenerate = new JButton("Novo Cérebro");
+	private static JLabel networkRunning = new JLabel("not running");
 	
 	Driver driver;
 	
 	public LoadGUI(Driver driver2){
 		this.driver = driver2;
 		setSize(WIDTH, HEIGHT);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setLocation((int) screenSize.getWidth()/2 + 350, 200);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLayout(new FlowLayout());
+		setLayout(new BorderLayout());
 		
 		ActionListener listener = new ActionListener() {
 			
@@ -48,21 +60,33 @@ public class LoadGUI extends JFrame{
 			}
 		};
 		
-		//GoodDriver.saveBrain(String filename) && loadBrain(String filename)
+		JPanel plabel = new JPanel();
+		JPanel pbuttons = new JPanel();
 		
 		btGenerate.addActionListener(listener);
 		btLoad.addActionListener(listener);
 		btSave.addActionListener(listener);
 		
-		getContentPane().add(btGenerate);
-		getContentPane().add(btLoad);
-		getContentPane().add(btSave);
+		plabel.add(networkRunning);
+		
+		pbuttons.add(btGenerate);
+		pbuttons.add(btLoad);
+		pbuttons.add(btSave);
+		
+		getContentPane().add(BorderLayout.NORTH, plabel);
+		getContentPane().add(BorderLayout.SOUTH, pbuttons);
+		
+		
 	}
 	
 
 
 	public void start() {
 		setVisible(true);
+	}
+	
+	public static void updateRunningLabel(String s){
+		networkRunning.setText("Running: "+s);
 	}
 	
 }
