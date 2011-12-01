@@ -116,7 +116,6 @@ public class GoodDriver extends Driver {
 
 		
 
-		int iteration = 1;
 		while (true) {
 			
 			try {
@@ -126,9 +125,9 @@ public class GoodDriver extends Driver {
 			}
 			int c = 0;
 			for (FeedForward ff : b.getNeuralNetworks()) {
-				System.out.println("Iteration: " + iteration + " network: "
+				System.out.println("Iteration: " + b.getCurrent_iteration() + " network: "
 						+ (++c) + "...");
-				System.out.println("Running " + ff.getDescriptor());
+//				System.out.println("Running " + ff.getDescriptor());
 				try {
 					wait(1000);
 				} catch (InterruptedException e) {
@@ -162,8 +161,7 @@ public class GoodDriver extends Driver {
 				timer.stop();
 				t.reset();
 			}
-			b.learn(iteration);
-			iteration++;
+			b.learn();
 		}
 	}
 
