@@ -213,6 +213,15 @@ public class GoodDriver extends Driver {
 			else
 				finalBrain = b;
 		}
+		//now... order
+		while (!finalBrain.isOrdered(finalBrain.getNeuralNetworks())){
+			finalBrain.order(finalBrain.getNeuralNetworks());
+		}
+		
+		for (FeedForward ff: finalBrain.getNeuralNetworks()){
+			System.out.println(ff.getDescriptor() + ">: " + ff.getFitness());
+		}
+
 
 		if (finalBrain != null)
 			brain = finalBrain;
