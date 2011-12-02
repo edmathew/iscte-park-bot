@@ -1,6 +1,7 @@
 package main_stuff;
 
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 
 import framework.TestbedTest;
 import main_stuff.CarTest;
@@ -102,6 +103,11 @@ public abstract class Driver implements Runnable{
 
 	public void discard() {
 		timerRanOut = true;
+	}
+
+	public void loadMultipleFiles(LinkedList<String> filesToLoad) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
