@@ -108,7 +108,7 @@ public class GoodDriver extends Driver {
 			b = new Brain();
 			brain = b;
 			int numberOfSensors = t.getCar().getNumberOfSensors();
-			b.createStarterNetworks(numberOfSensors, 9);
+			b.createStarterNetworks(numberOfSensors+1, 9);
 		} else
 			b = brain;
 
@@ -150,6 +150,7 @@ public class GoodDriver extends Driver {
 				while (!t.isColliding() && timerRanOut == false) {
 					double[] temp = iu.getUniformValue(t.getCar()
 							.getSensorStatusInDouble());
+					temp = addFitnessAsInput(temp, t.getScore());
 					double[] input = concatentate(temp, output);
 					output = ff.calculate(input);
 					actuate(output);
@@ -164,6 +165,16 @@ public class GoodDriver extends Driver {
 			}
 			b.learn();
 		}
+	}
+
+	private double[] addFitnessAsInput(double[] temp, double score) {
+		double[] temp2 = new double[temp.length + 1];
+		int c = 0;
+		for (double s: temp){
+			temp2[c++] = s;
+		}
+		temp2[c] = score;
+		return temp2;
 	}
 
 	public void saveBrain(String fileName) {
