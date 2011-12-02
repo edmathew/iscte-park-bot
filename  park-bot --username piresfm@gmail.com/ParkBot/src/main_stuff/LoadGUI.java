@@ -68,6 +68,7 @@ public class LoadGUI extends JFrame{
 							filesToLoad.add(file);
 					}
 					driver.loadMultipleFiles(filesToLoad);
+					new Thread(driver).start();
 				}
 			}
 		};

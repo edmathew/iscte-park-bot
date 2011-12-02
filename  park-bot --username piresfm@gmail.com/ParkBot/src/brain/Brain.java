@@ -16,7 +16,7 @@ public class Brain implements Serializable {
 	private static final int NUMBER_OF_CREATIONAL_NETWORKS = 10;
 	private static final int NUMBER_OF_NEURONS_IN_HIDDEN_LAYER = 27;
 	private List<FeedForward> neuralNetworks = new ArrayList<FeedForward>();
-	
+
 	public static Brain readFromFile(String fileName) {
 		ObjectInputStream stream;
 		Brain b = null;
@@ -24,13 +24,13 @@ public class Brain implements Serializable {
 		try {
 			stream = new ObjectInputStream(new FileInputStream(new File(
 					fileName)));
-			b = (Brain)stream.readObject();
+			b = (Brain) stream.readObject();
 			stream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 		}
-		
+
 		return b;
 	}
 
@@ -38,17 +38,23 @@ public class Brain implements Serializable {
 	 * @return top NumberOfStarterNetworks
 	 */
 	public List<FeedForward> topN() {
-		if (!isOrdered(neuralNetworks))
-			order(neuralNetworks);
-
-		return neuralNetworks.subList(0, NUMBER_OF_STARTER_NETWORKS - 1);
+		/*
+		 * if (!isOrdered(neuralNetworks)) order(neuralNetworks);
+		 */
+		return neuralNetworks.subList(0, NUMBER_OF_STARTER_NETWORKS);
 	}
 
 	public void concat(List<FeedForward> newList) {
+		System.out.println(neuralNetworks.size());
 		neuralNetworks.addAll(newList);
-		neuralNetworks = topN();
+		System.out.println(neuralNetworks.size());
+		
+		while(!isOrdered(neuralNetworks))
+			order(neuralNetworks);
+		
+		//neuralNetworks = topN();
+		System.out.println(neuralNetworks.size());
 	}
-	
 
 	public void createStarterNetworks(int inputLength, int numberOfOutputs) {
 		for (int i = 0; i < NUMBER_OF_STARTER_NETWORKS; i++) {
