@@ -67,8 +67,7 @@ public class TestbedMain {
 		myDriver = driver;
 		LoadGUI lgui = new LoadGUI(myDriver);
 		lgui.start();
-//		Thread t = new Thread(driver);
-//		t.start();
+		
 		
 		
 	}

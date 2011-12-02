@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.LinkedList;
 
 import javax.swing.Timer;
 
@@ -97,10 +98,10 @@ public class GoodDriver extends Driver {
 
 	@Override
 	public synchronized void run() {
-		
+
 		PerformanceGUI pgui = new PerformanceGUI();
-//		super.run();
-//		System.out.println("here i am");
+		// super.run();
+		// System.out.println("here i am");
 		Brain b;
 
 		if (brain == null) {
@@ -114,8 +115,6 @@ public class GoodDriver extends Driver {
 		InputUniformization iu = new InputUniformization(0,
 				CarTest.DEFAULT_PARKING_SENSOR_DISTANCE);
 
-		
-
 		while (true) {
 			pgui.clear();
 			try {
@@ -125,8 +124,10 @@ public class GoodDriver extends Driver {
 			}
 			int c = 0;
 			for (FeedForward ff : b.getNeuralNetworks()) {
-				LoadGUI.updateRunningLabel("Iteration: " + b.getCurrent_iteration() + " network: " + (++c) + "...");
-//				System.out.println("Running " + ff.getDescriptor());
+				LoadGUI.updateRunningLabel("Iteration: "
+						+ b.getCurrent_iteration() + " network: " + (++c)
+						+ "...");
+				// System.out.println("Running " + ff.getDescriptor());
 				try {
 					wait(1000);
 				} catch (InterruptedException e) {
@@ -156,7 +157,7 @@ public class GoodDriver extends Driver {
 				}
 				ff.setFitness(t.getScore());
 				pgui.addData(ff.getDescriptor() + ": " + t.getScore());
-//				System.out.println(ff.getDescriptor() + ": " + t.getScore());
+				// System.out.println(ff.getDescriptor() + ": " + t.getScore());
 
 				timer.stop();
 				t.reset();
@@ -184,12 +185,26 @@ public class GoodDriver extends Driver {
 			stream = new ObjectInputStream(new FileInputStream(new File(
 					fileName)));
 			brain = (Brain) stream.readObject();
-			System.out.println("Load: " +brain);
+			System.out.println("Load: " + brain);
 			stream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 		}
+	}
+
+	public void loadMultipleFiles(LinkedList<String> filesToLoad) {
+		Brain finalBrain = null;
+		for (String file : filesToLoad) {
+			Brain b = Brain.readFromFile(file);
+			if (finalBrain != null)
+				finalBrain.concat(b.getNeuralNetworks());
+			else
+				finalBrain = b;
+		}
+
+		if (finalBrain != null)
+			brain = finalBrain;
 	}
 
 	private double[] concatentate(double[] input, double[] output) {
