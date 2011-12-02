@@ -45,12 +45,13 @@ public class Brain implements Serializable {
 	}
 
 	public void concat(List<FeedForward> newList) {
+		for(FeedForward ff : newList){
+			System.out.println(ff.getFitness());
+		}
 		System.out.println(neuralNetworks.size());
 		neuralNetworks.addAll(newList);
 		System.out.println(neuralNetworks.size());
 		
-		while(!isOrdered(neuralNetworks))
-			order(neuralNetworks);
 		
 		//neuralNetworks = topN();
 		System.out.println(neuralNetworks.size());
@@ -138,7 +139,7 @@ public class Brain implements Serializable {
 		return selectedNetworks;
 	}
 
-	private boolean isOrdered(List<FeedForward> list) {
+	public boolean isOrdered(List<FeedForward> list) {
 
 		for (int i = 1; i < list.size(); i++) {
 			if (list.get(i).getFitness() < list.get(i - 1).getFitness()) {
@@ -148,7 +149,7 @@ public class Brain implements Serializable {
 		return true;
 	}
 
-	private void order(List<FeedForward> iterationNetworks) {
+	public void order(List<FeedForward> iterationNetworks) {
 		// I hate sorting algorithms! BubbleSort I choose you!
 		for (int i = 1; i < iterationNetworks.size(); i++) {
 			if (iterationNetworks.get(i).getFitness() < iterationNetworks.get(
