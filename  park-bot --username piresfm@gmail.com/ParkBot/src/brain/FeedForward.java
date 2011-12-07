@@ -2,6 +2,7 @@ package brain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class FeedForward implements Serializable{
@@ -106,6 +107,49 @@ public class FeedForward implements Serializable{
 		}
 		copy.setDescriptor(descriptor);
 		return copy;
+	}
+	
+	public LinkedList<Double> getGeneticSequence(){
+		LinkedList<Double> geneticSequence =  new LinkedList<Double>(); 
+		for (FeedForwardLayer ffl: allLayers){
+			if (!ffl.isInput()){
+				geneticSequence.addAll(ffl.getGeneticSequence());
+			}
+		}
+		
+		return geneticSequence;
+	}
+	
+	public void loadFromGeneticSequence(LinkedList<Double> geneticSequence){
+		for (FeedForwardLayer ffl: allLayers){
+			if (!ffl.isInput()){
+				ffl.loadFromGeneticSequence(geneticSequence);
+			}
+		}
+	}
+
+	public LinkedList<Double> createChild(FeedForward mother) {
+		//TODO: cut-size shouldn't be so hardcoded;
+		
+		LinkedList<Double> myGenes = getGeneticSequence();
+		LinkedList<Double> mothersGenes = mother.getGeneticSequence();
+		LinkedList<Double> childsGenes = new LinkedList<Double>(); 
+		
+		int cutSize = myGenes.size()/3;
+		int cuttingPoint1 = (int) (Math.random()*(myGenes.size() - cutSize));
+		int cuttingPoint2 = (int) cuttingPoint1 + cutSize;
+		
+		//Child will have Father - Mother - Father Genes
+		
+		for (int i = 0; i < myGenes.size(); i++){
+			if (i < cuttingPoint1 || i > cuttingPoint2){
+				childsGenes.add(myGenes.get(i));
+			}else{
+				childsGenes.add(mothersGenes.get(i));
+			}
+		}
+		
+		return childsGenes;
 	}
 	
 	
