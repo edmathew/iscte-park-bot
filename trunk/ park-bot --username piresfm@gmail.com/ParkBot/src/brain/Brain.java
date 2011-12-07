@@ -8,12 +8,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import learning_methods.LearningMethod;
+
 public class Brain implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int current_iteration = 1;
-	private static final int NUMBER_OF_STARTER_NETWORKS = 20;
-	private static final int NUMBER_OF_CREATIONAL_NETWORKS = 10;
+	public static final int NUMBER_OF_STARTER_NETWORKS = 20;
+	public static final int NUMBER_OF_CREATIONAL_NETWORKS = 10;
 	private static final int NUMBER_OF_NEURONS_IN_HIDDEN_LAYER = 27;
 	private List<FeedForward> neuralNetworks = new ArrayList<FeedForward>();
 
@@ -79,64 +81,16 @@ public class Brain implements Serializable {
 		return neuralNetworks;
 	}
 
-	public void learn() {
-		// System.out.println("Sorting the networks...");
-		// ordenar as redes por score
-		while (!isOrdered(neuralNetworks)) {
-			order(neuralNetworks);
-		}
-		// for (FeedForward ff : neuralNetworks){
-		// System.out.println(ff.getDescriptor() + ">: " + ff.getFitness());
-		// }
-
-		// Verbose time. I want: Iteration Average; Iteration Best (with
-		// identification).
-		System.out.println("Iteration " + current_iteration + " results:");
-		System.out.println("Average: " + groupFitness(neuralNetworks)
-				/ neuralNetworks.size());
-		System.out.println("Best: " + neuralNetworks.get(0).getFitness()
-				+ " ( " + neuralNetworks.get(0).getDescriptor() + " ).");
-
-		// seleccionar redes de topo
-		ArrayList<FeedForward> creationalNetworks = selectNetworks(
-				neuralNetworks, NUMBER_OF_CREATIONAL_NETWORKS);
-
-		// preencher as primeiras posi��es com os top performers
-		neuralNetworks = creationalNetworks;
-		int c = 0;
-
-		// criar novas redes com base nas top anteriores
-		while (neuralNetworks.size() < NUMBER_OF_STARTER_NETWORKS) {
-			FeedForward evolvedNetwork = (FeedForward) creationalNetworks
-					.get(c).newInstance();
-			evolvedNetwork.setDescriptor(evolvedNetwork.getDescriptor() + "#E"
-					+ current_iteration);
-			evolvedNetwork.evolve(0.2);
-			neuralNetworks.add(evolvedNetwork);
-			c++;
-			if (c == NUMBER_OF_CREATIONAL_NETWORKS)
-				c = 0;
-		}
-
-		current_iteration++;
-
+	public void learn(LearningMethod lm) {
+		lm.learn(this);
 	}
 
-	private double groupFitness(List<FeedForward> nnlist) {
+	public double groupFitness(List<FeedForward> nnlist) {
 		double result = 0;
 		for (FeedForward ff : nnlist) {
 			result += ff.getFitness();
 		}
 		return result;
-	}
-
-	private ArrayList<FeedForward> selectNetworks(
-			List<FeedForward> iterationNetworks, int numberOfCreationalNetworks) {
-		ArrayList<FeedForward> selectedNetworks = new ArrayList<FeedForward>();
-		for (int i = 0; i < numberOfCreationalNetworks; i++)
-			selectedNetworks.add(iterationNetworks.get(i));
-
-		return selectedNetworks;
 	}
 
 	public boolean isOrdered(List<FeedForward> list) {
@@ -150,6 +104,7 @@ public class Brain implements Serializable {
 	}
 
 	public void order(List<FeedForward> iterationNetworks) {
+		//TODO: replace this with a quick-sort
 		// I hate sorting algorithms! BubbleSort I choose you!
 		for (int i = 1; i < iterationNetworks.size(); i++) {
 			if (iterationNetworks.get(i).getFitness() < iterationNetworks.get(
@@ -170,5 +125,10 @@ public class Brain implements Serializable {
 	public void setCurrent_iteration(int current_iteration) {
 		this.current_iteration = current_iteration;
 	}
+
+	public void setNeuralNetworks(List<FeedForward> subList) {
+		this.neuralNetworks = subList;
+	}
+
 
 }

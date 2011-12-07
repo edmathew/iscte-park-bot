@@ -1,6 +1,12 @@
 package brain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.Random;
 
 import activation.ActivationFunction;
@@ -150,6 +156,34 @@ public class FeedForwardLayer implements Serializable{
 			copy.setMatrix(matrix.clone());
 		}
 		return copy;
+	}
+	
+	public LinkedList<Double> getGeneticSequence(){
+		LinkedList<Double> geneticSequence = new LinkedList<Double>();
+		int rows = matrix.getRows();
+		int cols = matrix.getCols();
+		
+		for (int i = 0; i < rows; i++){
+			for (int j = 0; j < cols; j++){
+				geneticSequence.add(matrix.get(i, j));
+			}
+		}
+		
+		return geneticSequence;
+	}
+	
+	public int getNeuronNumber() {
+		return neuronNumber;
+	}
+
+	public void loadFromGeneticSequence(LinkedList<Double> geneticSequence) {
+		double[][] temp = new double[previousLayer.charge.length][neuronNumber];
+		for (int i= 0; i < previousLayer.charge.length; i++){
+			for (int j = 0; j < neuronNumber; j++){
+				temp[i][j] = geneticSequence.pop();
+			}
+		}
+		this.matrix = new Matrix(temp);
 	}
 
 }

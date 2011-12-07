@@ -12,6 +12,9 @@ import java.util.LinkedList;
 
 import javax.swing.Timer;
 
+import learning_methods.Procriation;
+import learning_methods.StandardLearning;
+
 import util.InputUniformization;
 
 import brain.Brain;
@@ -158,12 +161,11 @@ public class GoodDriver extends Driver {
 				}
 				ff.setFitness(t.getScore());
 				pgui.addData(ff.getDescriptor() + ": " + t.getScore());
-				// System.out.println(ff.getDescriptor() + ": " + t.getScore());
 
 				timer.stop();
 				t.reset();
 			}
-			b.learn();
+			b.learn(new Procriation());
 		}
 	}
 
