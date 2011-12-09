@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -164,6 +165,9 @@ public class GoodDriver extends Driver {
 				t.reset();
 			}
 			b.learn(lm, mutationRate);
+			String[] reportData = {"Iteration " + (b.getCurrent_iteration()-1), "Best: " + b.getNeuralNetworks().get(0).getFitness(), "Average: " + b.groupFitness(b.getNeuralNetworks())/b.getNeuralNetworks().size()};
+			writeReport(LoadGUI.getReportFile(), reportData);
+			
 		}
 	}
 	
@@ -182,6 +186,22 @@ public class GoodDriver extends Driver {
 //		return temp2;
 //	}
 
+	public void writeReport(String filename, String[] data){
+		try {
+			FileWriter fw = new FileWriter(filename);
+			for (String s : data){
+				fw.append(s+"\n");
+			}
+			fw.append("###");
+			fw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	
 	public void saveBrain(String fileName) {
 		ObjectOutputStream stream;
 
