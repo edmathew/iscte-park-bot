@@ -1,20 +1,20 @@
 package learning_methods;
 
+import main_stuff.LoadGUI;
 import brain.Brain;
 import brain.FeedForward;
 
 public class StandardLearning extends LearningMethod{
 
 	@Override
-	public void learn(Brain b) {
+	public void learn(Brain b, double mutationRate) {
 				while (!b.isOrdered(b.getNeuralNetworks())) {
 					b.order(b.getNeuralNetworks());
 				}
-				System.out.println("Iteration " + b.getCurrent_iteration() + " results:");
-				System.out.println("Average: " + b.groupFitness(b.getNeuralNetworks()) / b.getNeuralNetworks().size());
-				System.out.println("Best: " + b.getNeuralNetworks().get(0).getFitness()
-						+ " ( " + b.getNeuralNetworks().get(0).getDescriptor() + " ).");
 
+				String s = "Average: " + b.groupFitness(b.getNeuralNetworks()) / b.getNeuralNetworks().size();
+				s  += "Best: " + b.getNeuralNetworks().get(0).getFitness();
+				LoadGUI.setPreviousPerformance(s);
 				b.setNeuralNetworks(b.getNeuralNetworks().subList(0, Brain.NUMBER_OF_CREATIONAL_NETWORKS));
 				int c = 0;
 
@@ -23,7 +23,7 @@ public class StandardLearning extends LearningMethod{
 							.get(c).newInstance();
 					evolvedNetwork.setDescriptor(evolvedNetwork.getDescriptor() + "#E"
 							+ b.getCurrent_iteration());
-					evolvedNetwork.evolve(0.2);
+					evolvedNetwork.evolve(mutationRate);
 					b.getNeuralNetworks().add(evolvedNetwork);
 					c++;
 					if (c == Brain.NUMBER_OF_CREATIONAL_NETWORKS)

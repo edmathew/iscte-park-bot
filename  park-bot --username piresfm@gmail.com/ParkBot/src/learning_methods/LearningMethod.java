@@ -4,6 +4,6 @@ import brain.Brain;
 
 public abstract class LearningMethod {
 	
-	public abstract void learn(Brain b);
+	public abstract void learn(Brain b, double mutationRate);
 
 }
