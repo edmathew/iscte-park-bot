@@ -41,6 +41,13 @@ public class FeedForward implements Serializable{
 	public void setDescriptor(String descriptor) {
 		this.descriptor = descriptor;
 	}
+	
+	public String getCleanDescriptor(){
+		String temp = descriptor.replace("+", "");
+		temp = temp.replace("(", "");
+		temp = temp.replace(")", "");
+		return temp;
+	}
 
 	public double[] calculate(double[] input){
 		for (FeedForwardLayer ffl: allLayers){

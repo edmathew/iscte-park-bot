@@ -12,8 +12,7 @@ import java.util.LinkedList;
 
 import javax.swing.Timer;
 
-import learning_methods.Procriation;
-import learning_methods.StandardLearning;
+import learning_methods.LearningMethod;
 
 import util.InputUniformization;
 
@@ -25,6 +24,8 @@ import framework.TestbedTest;
 public class GoodDriver extends Driver {
 
 	private Brain brain;
+	private LearningMethod lm;
+	private double mutationRate;
 
 	public GoodDriver(TestbedTest t) {
 		super(t);
@@ -111,7 +112,7 @@ public class GoodDriver extends Driver {
 			b = new Brain();
 			brain = b;
 			int numberOfSensors = t.getCar().getNumberOfSensors();
-			b.createStarterNetworks(numberOfSensors+1, 9);
+			b.createStarterNetworks(numberOfSensors, 9);
 		} else
 			b = brain;
 
@@ -130,13 +131,11 @@ public class GoodDriver extends Driver {
 				LoadGUI.updateRunningLabel("Iteration: "
 						+ b.getCurrent_iteration() + " network: " + (++c)
 						+ "...");
-				// System.out.println("Running " + ff.getDescriptor());
 				try {
 					wait(1000);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				// System.out.println("GO!");
 				timerRanOut = false;
 
 				Timer timer = new Timer(20000, new ActionListener() {
@@ -153,7 +152,6 @@ public class GoodDriver extends Driver {
 				while (!t.isColliding() && timerRanOut == false) {
 					double[] temp = iu.getUniformValue(t.getCar()
 							.getSensorStatusInDouble());
-					temp = addFitnessAsInput(temp, t.getScore());
 					double[] input = concatentate(temp, output);
 					output = ff.calculate(input);
 					actuate(output);
@@ -165,19 +163,24 @@ public class GoodDriver extends Driver {
 				timer.stop();
 				t.reset();
 			}
-			b.learn(new Procriation());
+			b.learn(lm, mutationRate);
 		}
+	}
+	
+	public void setLearningMethod(LearningMethod lm, double mutationRate){
+		this.lm = lm;
+		this.mutationRate = mutationRate;
 	}
 
-	private double[] addFitnessAsInput(double[] temp, double score) {
-		double[] temp2 = new double[temp.length + 1];
-		int c = 0;
-		for (double s: temp){
-			temp2[c++] = s;
-		}
-		temp2[c] = score;
-		return temp2;
-	}
+//	private double[] addFitnessAsInput(double[] temp, double score) {
+//		double[] temp2 = new double[temp.length + 1];
+//		int c = 0;
+//		for (double s: temp){
+//			temp2[c++] = s;
+//		}
+//		temp2[c] = score;
+//		return temp2;
+//	}
 
 	public void saveBrain(String fileName) {
 		ObjectOutputStream stream;

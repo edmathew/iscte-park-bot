@@ -81,8 +81,8 @@ public class Brain implements Serializable {
 		return neuralNetworks;
 	}
 
-	public void learn(LearningMethod lm) {
-		lm.learn(this);
+	public void learn(LearningMethod lm, double mutationRate) {
+		lm.learn(this, mutationRate);
 	}
 
 	public double groupFitness(List<FeedForward> nnlist) {

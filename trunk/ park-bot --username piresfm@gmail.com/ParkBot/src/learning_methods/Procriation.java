@@ -3,17 +3,23 @@ package learning_methods;
 import java.util.LinkedList;
 import java.util.List;
 
+import main_stuff.LoadGUI;
+
 import brain.Brain;
 import brain.FeedForward;
 
 public class Procriation extends LearningMethod{
 
 	@Override
-	public void learn(Brain b) {
+	public void learn(Brain b, double mutationRate) {
 		synchronized (b.getNeuralNetworks()){
 			while (!b.isOrdered(b.getNeuralNetworks())){
 				b.order(b.getNeuralNetworks());
 			}
+			
+			String s = "Average: " + b.groupFitness(b.getNeuralNetworks()) / b.getNeuralNetworks().size();
+			s  += "Best: " + b.getNeuralNetworks().get(0).getFitness();
+			LoadGUI.setPreviousPerformance(s);
 
 			LinkedList<FeedForward> temp = new LinkedList<FeedForward>();
 
@@ -25,18 +31,23 @@ public class Procriation extends LearningMethod{
 
 			//		System.out.println("Gene size: " + king.getGeneticSequence().size());
 
-			LinkedList<Double> kings_genes = king.getGeneticSequence();
 			for (FeedForward ff: matingPartners){
 				LinkedList<Double> childs_genes = king.createChild(ff);
 				FeedForward child = king.newInstance();
 				child.loadFromGeneticSequence(childs_genes);
-				child.setDescriptor("("+king.getDescriptor() + ")+(" + ff.getDescriptor()+")");
-				child.evolve(0.1);
+				child.setDescriptor("E"+b.getCurrent_iteration());
+				child.evolve(mutationRate);
 				temp.add(child);
 			}
 			
-			b.setNeuralNetworks(temp);
-			b.getNeuralNetworks().addAll(matingPartners);
+			matingPartners.add(king);
+			
+			while (!b.isOrdered(matingPartners))
+				b.order(matingPartners);
+			
+			b.setNeuralNetworks(matingPartners);
+			b.getNeuralNetworks().addAll(temp);
+			b.setCurrent_iteration(b.getCurrent_iteration()+1);
 		}
 
 
