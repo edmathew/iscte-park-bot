@@ -1,7 +1,6 @@
 package brain;
 
 import matrix.Matrix;
-import feed_fwd.FeedforwardLayer;
 
 public class BrainTester {
 	public static void main(String[] args) {
