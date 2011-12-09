@@ -27,7 +27,7 @@ public class LoadGUI extends JFrame{
 	 */
 	private static final long serialVersionUID = -4008918717515477552L;
 	private final int WIDTH = 400;
-	private final int HEIGHT = 150;
+	private final int HEIGHT = 180;
 	private JButton btLoad = new JButton("Carregar");
 	private JButton btSave = new JButton("Guardar");
 	private JButton btGenerate = new JButton("Novo Cérebro");
@@ -37,6 +37,7 @@ public class LoadGUI extends JFrame{
 	private String[] algTypes = {"Simple Mutation","X-Over"}; 
 	private JComboBox algorithmType = new JComboBox(algTypes);
 	private static JLabel previousPerformance = new JLabel ("not enough iterations yet");
+	private static JTextField reportFile = new JTextField("report.txt");
 	
 	Driver driver;
 	
@@ -95,19 +96,26 @@ public class LoadGUI extends JFrame{
 		};
 		
 		mutationRate.setColumns(10);
+		reportFile.setColumns(20);
 		
 		JPanel topPanel = new JPanel(new BorderLayout());
 		JPanel inputPanel = new JPanel(new FlowLayout());
-		JPanel plabel = new JPanel();
+		JPanel plabel = new JPanel(new BorderLayout());
 		JPanel previousPerformancePanel = new JPanel();
+		JPanel reportFilePanel = new JPanel();
 		JPanel pbuttons = new JPanel();
+		JPanel networkRunningPanel = new JPanel();
 		
+		networkRunningPanel.add(networkRunning);
 		btGenerate.addActionListener(listener);
 		btLoad.addActionListener(listener);
 		btSave.addActionListener(listener);
 		btLoadSeveral.addActionListener(listener);
 		
-		plabel.add(networkRunning);
+		reportFilePanel.add(reportFile);
+		
+		plabel.add(BorderLayout.NORTH, reportFilePanel);
+		plabel.add(BorderLayout.SOUTH, networkRunningPanel);
 		previousPerformancePanel.add(previousPerformance);
 		
 		pbuttons.add(btGenerate);
@@ -141,6 +149,12 @@ public class LoadGUI extends JFrame{
 	
 	public static void setPreviousPerformance(String s){
 		previousPerformance.setText(s);
+	}
+
+
+
+	public static String getReportFile() {
+		return reportFile.getText();
 	}
 	
 }
