@@ -1,12 +1,7 @@
 package brain;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import java.util.Random;
 
 import activation.ActivationFunction;
@@ -14,6 +9,7 @@ import activation.ActivationSigmoid;
 import matrix.Matrix;
 import matrix.MatrixMath;
 
+@SuppressWarnings("serial")
 public class FeedForwardLayer implements Serializable{
 	private int neuronNumber;
 	private Matrix matrix;
@@ -62,17 +58,8 @@ public class FeedForwardLayer implements Serializable{
 			this.charge = input;
 		}else{
 			//layers restantes, usa a carga das layers anteriores para dar input aos seus neurónios
-			//ponderar no novo módulo de matrizes devolver as colunas inteiras para permitir iteração
 			for (int i = 0 ; i < matrix.getCols(); i++){
-				//				Matrix inputm = formMatrix(previousLayer.getCharge());
-				//				Matrix m = formMatrix(matrix.getCol(i).toPackedArray());
-				//				System.out.println("Calculating dot product between");
-				//				printMatrix(inputm);
-				//				System.out.println("and");
-				//				printMatrix(m);
-
 				this.setCharge(i, MatrixMath.dotProduct(formMatrix(previousLayer.getCharge()), matrix.getCol(i)));
-				//				System.out.println("result = " + MatrixMath.dotProduct(inputm, m));
 			}
 		}
 	}
@@ -106,8 +93,6 @@ public class FeedForwardLayer implements Serializable{
 	}
 
 	private void setCharge(int pos, double charge) {
-		//que carga é que estes neurónios vão passar aos neurónios da camada seguinte?
-		//vai depender da função de activação
 		if (!isOutput())
 			this.charge[pos] = activationFunction.activationFunction(charge);
 		else

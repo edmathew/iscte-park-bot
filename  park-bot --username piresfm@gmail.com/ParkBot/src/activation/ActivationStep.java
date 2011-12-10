@@ -1,5 +1,6 @@
 package activation;
 
+@SuppressWarnings("serial")
 public class ActivationStep implements ActivationFunction{
 	double thresholdValue;
 	

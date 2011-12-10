@@ -1,6 +1,7 @@
 package util;
 
 public class InputUniformization {
+	@SuppressWarnings("unused")
 	private double lowestValue;
 	private double highestValue;
 	
@@ -13,14 +14,6 @@ public class InputUniformization {
 		return ((highestValue - value)/highestValue);
 	}
 	
-	public static void main(String[] args) {
-		double current = 3.1;
-		double current2[] = {3.1, 3.1, 2, 3};
-		
-		InputUniformization iu = new InputUniformization(0, 3.1);
-		System.out.println(iu.getUniformValue(current2));
-	}
-
 	public double[] getUniformValue(double[] array) {
 		double temp[] = new double[array.length];
 		for (int i=0; i < temp.length; i++){
