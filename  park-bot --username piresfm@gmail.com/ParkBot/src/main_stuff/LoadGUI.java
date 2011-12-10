@@ -37,7 +37,7 @@ public class LoadGUI extends JFrame{
 	private String[] algTypes = {"Simple Mutation","X-Over"}; 
 	private JComboBox algorithmType = new JComboBox(algTypes);
 	private static JLabel previousPerformance = new JLabel ("not enough iterations yet");
-	private static JTextField reportFile = new JTextField("report.txt");
+	private static JTextField reportFile = new JTextField("report.csv");
 	
 	Driver driver;
 	
