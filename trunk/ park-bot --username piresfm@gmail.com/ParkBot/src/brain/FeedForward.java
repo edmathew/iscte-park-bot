@@ -9,7 +9,6 @@ public class FeedForward implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private String descriptor;
-	private FeedForwardLayer firstLayer = null;
 	private FeedForwardLayer lastLayer = null;
 	private List<FeedForwardLayer> allLayers = new ArrayList<FeedForwardLayer>();
 	private double fitness = 0;
@@ -25,7 +24,7 @@ public class FeedForward implements Serializable{
 		}
 
 		if (allLayers.size() == 0){
-			firstLayer = lastLayer = ffl;
+			lastLayer = ffl;
 		}else{
 			lastLayer = ffl;
 		}
@@ -55,11 +54,6 @@ public class FeedForward implements Serializable{
 				ffl.calculate(input);
 			else if(ffl.isHidden() || ffl.isOutput())
 				ffl.calculate(null);
-			//			else if(ffl.isOutput() && allLayers.size() == 2)
-			//				ffl.calculate(null);
-			//			System.out.println("this layer has charge: " + printDoubleArray(ffl.getCharge()));
-			//			if (ffl.getMatrix() != null)
-			//				ffl.printMatrix(ffl.getMatrix());
 		}
 		return lastLayer.getCharge();
 	}
@@ -95,7 +89,6 @@ public class FeedForward implements Serializable{
 	}
 
 	public void setFirstLayer(FeedForwardLayer firstLayer) {
-		this.firstLayer = firstLayer;
 	}
 
 	public void setLastLayer(FeedForwardLayer lastLayer) {
@@ -136,8 +129,6 @@ public class FeedForward implements Serializable{
 	}
 
 	public LinkedList<Double> createChild(FeedForward mother) {
-		//TODO: cut-size shouldn't be so hardcoded;
-		
 		LinkedList<Double> myGenes = getGeneticSequence();
 		LinkedList<Double> mothersGenes = mother.getGeneticSequence();
 		LinkedList<Double> childsGenes = new LinkedList<Double>(); 
