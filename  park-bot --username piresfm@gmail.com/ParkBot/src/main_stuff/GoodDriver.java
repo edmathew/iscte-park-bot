@@ -166,8 +166,8 @@ public class GoodDriver extends Driver {
 				t.reset();
 			}
 			b.learn(lm, mutationRate);
-			String[] reportData = {"Iteration " + (b.getCurrent_iteration()-1), "" + b.getNeuralNetworks().get(0).getFitness(), "" + b.groupFitness(b.getNeuralNetworks())/b.getNeuralNetworks().size()};
-			writeReport(LoadGUI.getReportFile(), reportData);
+
+			
 			
 		}
 	}
@@ -187,7 +187,7 @@ public class GoodDriver extends Driver {
 //		return temp2;
 //	}
 
-	public void writeReport(String filename, String[] data){
+	public static void writeReport(String filename, String[] data){
 		try {
 			FileWriter fw = new FileWriter(filename, true);
 			BufferedWriter bw = new BufferedWriter(fw); 

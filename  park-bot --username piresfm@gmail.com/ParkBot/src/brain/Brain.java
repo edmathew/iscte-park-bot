@@ -14,9 +14,9 @@ public class Brain implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private int current_iteration = 1;
-	public static final int NUMBER_OF_STARTER_NETWORKS = 20;
+	public static final int NUMBER_OF_STARTER_NETWORKS = 40;
 	public static final int NUMBER_OF_CREATIONAL_NETWORKS = 10;
-	private static final int NUMBER_OF_NEURONS_IN_HIDDEN_LAYER = 27;
+	private static final int NUMBER_OF_NEURONS_IN_HIDDEN_LAYER = 23;
 	private List<FeedForward> neuralNetworks = new ArrayList<FeedForward>();
 
 	public static Brain readFromFile(String fileName) {

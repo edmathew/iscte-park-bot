@@ -1,5 +1,6 @@
 package learning_methods;
 
+import main_stuff.GoodDriver;
 import main_stuff.LoadGUI;
 import brain.Brain;
 import brain.FeedForward;
@@ -11,9 +12,12 @@ public class StandardLearning extends LearningMethod{
 				while (!b.isOrdered(b.getNeuralNetworks())) {
 					b.order(b.getNeuralNetworks());
 				}
-
-				String s = "Average: " + b.groupFitness(b.getNeuralNetworks()) / b.getNeuralNetworks().size();
-				s  += "Best: " + b.getNeuralNetworks().get(0).getFitness();
+				double average = b.groupFitness(b.getNeuralNetworks()) / b.getNeuralNetworks().size();
+				double best = b.getNeuralNetworks().get(0).getFitness();
+				String s = "Average: " + average;
+				s  += "Best: " + best;
+				String[] reportData = {""+(b.getCurrent_iteration()-1), "" + average, "" + best};
+				GoodDriver.writeReport(LoadGUI.getReportFile(), reportData);
 				LoadGUI.setPreviousPerformance(s);
 				b.setNeuralNetworks(b.getNeuralNetworks().subList(0, Brain.NUMBER_OF_CREATIONAL_NETWORKS));
 				int c = 0;

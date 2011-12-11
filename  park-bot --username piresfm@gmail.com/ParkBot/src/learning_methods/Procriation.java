@@ -3,6 +3,7 @@ package learning_methods;
 import java.util.LinkedList;
 import java.util.List;
 
+import main_stuff.GoodDriver;
 import main_stuff.LoadGUI;
 
 import brain.Brain;
@@ -17,8 +18,12 @@ public class Procriation extends LearningMethod{
 				b.order(b.getNeuralNetworks());
 			}
 			
-			String s = "Average: " + b.groupFitness(b.getNeuralNetworks()) / b.getNeuralNetworks().size();
-			s  += "Best: " + b.getNeuralNetworks().get(0).getFitness();
+			double average = b.groupFitness(b.getNeuralNetworks()) / b.getNeuralNetworks().size();
+			double best = b.getNeuralNetworks().get(0).getFitness();
+			String s = "Average: " + average;
+			s  += "Best: " + best;
+			String[] reportData = {""+(b.getCurrent_iteration()-1), "" + average, "" + best};
+			GoodDriver.writeReport(LoadGUI.getReportFile(), reportData);
 			LoadGUI.setPreviousPerformance(s);
 
 			LinkedList<FeedForward> temp = new LinkedList<FeedForward>();
