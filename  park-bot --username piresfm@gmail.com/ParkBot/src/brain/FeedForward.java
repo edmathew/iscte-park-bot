@@ -7,7 +7,7 @@ import java.util.List;
 
 public class FeedForward implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
+
 	private String descriptor;
 	private FeedForwardLayer lastLayer = null;
 	private List<FeedForwardLayer> allLayers = new ArrayList<FeedForwardLayer>();
@@ -40,13 +40,6 @@ public class FeedForward implements Serializable{
 	public void setDescriptor(String descriptor) {
 		this.descriptor = descriptor;
 	}
-	
-	public String getCleanDescriptor(){
-		String temp = descriptor.replace("+", "");
-		temp = temp.replace("(", "");
-		temp = temp.replace(")", "");
-		return temp;
-	}
 
 	public double[] calculate(double[] input){
 		for (FeedForwardLayer ffl: allLayers){
@@ -56,15 +49,6 @@ public class FeedForward implements Serializable{
 				ffl.calculate(null);
 		}
 		return lastLayer.getCharge();
-	}
-
-	public String printDoubleArray(double[] array){
-		String s = "";
-		for (int i = 0; i < array.length; i++){
-			s+= " " + array[i];
-		}
-
-		return s;
 	}
 
 	public double getFitness() {
@@ -108,7 +92,7 @@ public class FeedForward implements Serializable{
 		copy.setDescriptor(descriptor);
 		return copy;
 	}
-	
+
 	public LinkedList<Double> getGeneticSequence(){
 		LinkedList<Double> geneticSequence =  new LinkedList<Double>(); 
 		for (FeedForwardLayer ffl: allLayers){
@@ -116,10 +100,10 @@ public class FeedForward implements Serializable{
 				geneticSequence.addAll(ffl.getGeneticSequence());
 			}
 		}
-		
+
 		return geneticSequence;
 	}
-	
+
 	public void loadFromGeneticSequence(LinkedList<Double> geneticSequence){
 		for (FeedForwardLayer ffl: allLayers){
 			if (!ffl.isInput()){
@@ -132,13 +116,13 @@ public class FeedForward implements Serializable{
 		LinkedList<Double> myGenes = getGeneticSequence();
 		LinkedList<Double> mothersGenes = mother.getGeneticSequence();
 		LinkedList<Double> childsGenes = new LinkedList<Double>(); 
-		
+
 		int cutSize = myGenes.size()/3;
 		int cuttingPoint1 = (int) (Math.random()*(myGenes.size() - cutSize));
 		int cuttingPoint2 = (int) cuttingPoint1 + cutSize;
-		
+
 		//Child will have Father - Mother - Father Genes
-		
+
 		for (int i = 0; i < myGenes.size(); i++){
 			if (i < cuttingPoint1 || i > cuttingPoint2){
 				childsGenes.add(myGenes.get(i));
@@ -146,9 +130,9 @@ public class FeedForward implements Serializable{
 				childsGenes.add(mothersGenes.get(i));
 			}
 		}
-		
+
 		return childsGenes;
 	}
-	
-	
+
+
 }
