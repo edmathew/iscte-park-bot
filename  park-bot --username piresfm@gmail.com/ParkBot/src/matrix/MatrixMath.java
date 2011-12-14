@@ -13,7 +13,7 @@
 package matrix;
 
 import matrix.exception.MatrixError;
-import matrix.som.SelfOrganizingMap;
+import som.SelfOrganizingMap;
 
 /**
  * MatrixMath: This class can perform many different mathematical
