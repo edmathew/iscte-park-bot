@@ -12,8 +12,8 @@
  */
 package matrix;
 
-import exception.MatrixError;
-import som.SelfOrganizingMap;
+import matrix.exception.MatrixError;
+import matrix.som.SelfOrganizingMap;
 
 /**
  * MatrixMath: This class can perform many different mathematical
