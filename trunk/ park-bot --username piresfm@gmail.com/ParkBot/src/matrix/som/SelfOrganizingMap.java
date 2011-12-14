@@ -10,13 +10,13 @@
  * GNU Lesser General Public License (LGPL)
  * http://www.gnu.org/copyleft/lesser.html
  */
-package som;
+package matrix.som;
 
 import java.io.Serializable;
 
 import matrix.Matrix;
 import matrix.MatrixMath;
-import som.NormalizeInput.NormalizationType;
+import matrix.som.NormalizeInput.NormalizationType;
 
 /**
  * SelfOrganizingMap: The Self Organizing Map, or Kohonen Neural Network, is a

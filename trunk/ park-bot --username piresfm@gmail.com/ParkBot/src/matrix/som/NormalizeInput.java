@@ -10,7 +10,7 @@
  * GNU Lesser General Public License (LGPL)
  * http://www.gnu.org/copyleft/lesser.html
  */
-package som;
+package matrix.som;
 
 import matrix.Matrix;
 import matrix.MatrixMath;
