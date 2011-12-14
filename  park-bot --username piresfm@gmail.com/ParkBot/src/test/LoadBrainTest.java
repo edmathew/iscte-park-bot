@@ -2,8 +2,9 @@ package test;
 
 import java.util.LinkedList;
 
+import jb2d_framework.TestbedModel;
+
 import main_stuff.GoodDriver;
-import framework.TestbedModel;
 
 public class LoadBrainTest {
 

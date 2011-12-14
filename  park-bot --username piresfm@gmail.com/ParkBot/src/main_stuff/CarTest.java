@@ -2,6 +2,9 @@ package main_stuff;
 import java.awt.event.KeyEvent;
 import java.util.LinkedList;
 
+import jb2d_framework.TestbedSettings;
+import jb2d_framework.TestbedTest;
+
 
 import org.jbox2d.collision.shapes.PolygonShape;
 import org.jbox2d.common.Vec2;
@@ -12,8 +15,6 @@ import org.jbox2d.dynamics.FixtureDef;
 import support.Car;
 import support.ParkingSensor;
 import support.Tagger;
-import framework.TestbedSettings;
-import framework.TestbedTest;
 
 
 public class CarTest extends TestbedTest{

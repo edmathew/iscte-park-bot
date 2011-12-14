@@ -1,5 +1,7 @@
-package brain;
+package test;
 
+import brain.FeedForward;
+import brain.FeedForwardLayer;
 import matrix.Matrix;
 
 public class BrainTester {
