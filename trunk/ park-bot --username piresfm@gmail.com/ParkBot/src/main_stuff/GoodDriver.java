@@ -14,6 +14,8 @@ import java.util.LinkedList;
 
 import javax.swing.Timer;
 
+import jb2d_framework.TestbedTest;
+
 import learning_methods.LearningMethod;
 
 import util.InputUniformization;
@@ -21,7 +23,6 @@ import util.InputUniformization;
 import brain.Brain;
 import brain.FeedForward;
 
-import framework.TestbedTest;
 
 public class GoodDriver extends Driver {
 

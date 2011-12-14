@@ -29,14 +29,15 @@ package main_stuff;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
+import jb2d_framework.TestList;
+import jb2d_framework.TestPanelJ2D;
+import jb2d_framework.TestbedFrame;
+import jb2d_framework.TestbedModel;
+import jb2d_framework.TestbedPanel;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import framework.TestList;
-import framework.TestPanelJ2D;
-import framework.TestbedFrame;
-import framework.TestbedModel;
-import framework.TestbedPanel;
 
 /**
  * The entry point for the testbed application

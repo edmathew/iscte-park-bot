@@ -1,6 +1,6 @@
 package test;
 
-import framework.TestbedModel;
+import jb2d_framework.TestbedModel;
 import main_stuff.GoodDriver;
 
 public class SerializationTest {

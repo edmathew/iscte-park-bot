@@ -1,11 +1,11 @@
 package main_stuff;
 
+import jb2d_framework.TestbedTest;
 import util.InputUniformization;
 import activation.ActivationThreshold;
 import brain.FeedForward;
 import brain.FeedForwardLayer;
 
-import framework.TestbedTest;
 import matrix.Matrix;
 
 public class StupidDriver extends Driver{
