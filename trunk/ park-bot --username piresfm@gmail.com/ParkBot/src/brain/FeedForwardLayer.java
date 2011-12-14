@@ -85,13 +85,6 @@ public class FeedForwardLayer implements Serializable{
 		return inputVector;
 	}
 
-	public Matrix formMatrix(Double[] input){
-		Matrix inputVector = new Matrix(1, input.length);
-		for (int i = 0; i < input.length; i++)
-			inputVector.set(0, i, input[i]);
-		return inputVector;
-	}
-
 	private void setCharge(int pos, double charge) {
 		if (!isOutput())
 			this.charge[pos] = activationFunction.activationFunction(charge);
