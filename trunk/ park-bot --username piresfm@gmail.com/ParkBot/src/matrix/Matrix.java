@@ -14,7 +14,8 @@ package matrix;
 
 import java.io.Serializable;
 
-import exception.MatrixError;
+import matrix.exception.MatrixError;
+
 
 /**
  * Matrix: This class implements a mathematical matrix.  Matrix
